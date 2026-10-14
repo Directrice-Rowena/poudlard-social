@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poudlard | Notre communauté magique</title>
+<style>
+:root {
+  --night: #0b1024;
+  --panel: #151d38;
+  --line: #303d61;
+  --text: #f4f5ff;
+  --muted: #b8c1dc;
+  --gold: #e5d39b;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--text);
+  font-family: Georgia, serif;
+}
+header {
+  text-align: center;
+  padding: 32px 16px;
+  background: linear-gradient(145deg, #172448, #0b1024);
+  border-bottom: 1px solid var(--line);
+}
+header .moon { font-size: 38px; }
+h1 { letter-spacing: 3px; color: var(--gold); }
+header p, .muted { color: var(--muted); }
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  padding: 16px 8px;
+  background: #10172d;
+}
+nav a { color: #dce4ff; text-decoration: none; }
+main { max-width: 760px; margin: 26px auto; padding: 0 14px; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+.welcome { text-align: center; padding: 30px 20px; }
+h2 { color: var(--gold); }
+.button {
+  display: inline-block;
+  background: #d9c88e;
+  color: #11182c;
+  padding: 11px 17px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 8px;
+}
+.houses {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.house {
+  padding: 14px 8px;
+  text-align: center;
+  border-radius: 10px;
+  background: #0e1630;
+  border: 1px solid var(--line);
+}
+.heart { font-size: 25px; }
+.gryff { color: #f05b63; }
+.slyth { color: #53d39a; }
+.raven { color: #7ab8ff; }
+.huffle { color: #f0d45b; }
+footer { text-align: center; padding: 26px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div class="moon">🌙 ✨ 🏰</div>
+  <h1>POUDLARD</h1>
+  <p>Un château, quatre maisons, mille histoires.</p>
+</header>
+
+<nav>
+  <a href="#accueil">Accueil</a>
+  <a href="#maisons">Les maisons</a>
+  <a href="#stories">Stories</a>
+  <a href="#evenements">Événements</a>
+  <a href="#direction">Direction</a>
+</nav>
+
+<main id="accueil">
+  <section class="card welcome">
+    <p class="muted">LE MONDE MAGIQUE SE RETROUVE ICI</p>
+    <h2>Bienvenue à Poudlard</h2>
+    <p>
+      Fais connaissance avec les élèves, partage tes aventures
+      et écris ton histoire au cœur du monde magique.
+    </p>
+    <a class="button" href="#maisons">Découvrir les maisons</a>
+  </section>
+
+  <section class="card" id="maisons">
+    <h2>💫 Les quatre maisons</h2>
+    <p class="muted">
+      Chaque élève porte un cœur aux couleurs de sa maison.
+    </p>
+    <div class="houses">
+      <div class="house"><span class="heart gryff">♥</span><br>Gryffondor</div>
+      <div class="house"><span class="heart slyth">♥</span><br>Serpentard</div>
+      <div class="house"><span class="heart raven">♥</span><br>Serdaigle</div>
+      <div class="house"><span class="heart huffle">♥</span><br>Poufsouffle</div>
+    </div>
+  </section>
+
+  <section class="card" id="stories">
+    <h2>📱 Les stories</h2>
+    <p>
+      Les instants de vie des élèves auront bientôt leur place ici.
+      Chacun pourra choisir qui peut voir ses stories.
+    </p>
+    <p class="muted">
+      La publication et les réglages de confidentialité seront ajoutés
+      avec les comptes et la base de données.
+    </p>
+  </section>
+
+  <section class="card" id="evenements">
+    <h2>🪄 Les événements</h2>
+    <p>Matchs de Quidditch, bal de Noël, cours et sorties à Pré-au-Lard.</p>
+    <p class="muted">Les annonces de la direction apparaîtront ici.</p>
+  </section>
+
+  <section class="card" id="direction">
+    <h2>👑 Bureau de la Directrice Rowena</h2>
+    <p>
+      Un espace d'administration sécurisé sera ajouté pour gérer
+      les événements, les membres et la modération.
+    </p>
+    <p class="muted">
+      Cette maquette ne possède pas encore de connexion ni de fonctions
+      d'administration réelles.
+    </p>
+  </section>
+</main>
+
+<footer>
+  Poudlard · Notre communauté magique
+</footer>
+</body>
+</html>

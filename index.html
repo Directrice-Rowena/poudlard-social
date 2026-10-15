@@ -190,6 +190,28 @@ footer { text-align: center; padding: 26px; color: var(--muted); }
   </section>
 
   <section class="card hidden" id="profil">
+   
+  <div id="publication-form">
+    <h3>📣 Publier à Poudlard</h3>
+    <form id="create-post-form">
+      <label for="post-content">Ton message :</label>
+      <textarea
+        id="post-content"
+        maxlength="3000"
+        rows="4"
+        placeholder="Quoi de neuf dans les couloirs de Poudlard ?"
+        required
+      ></textarea>
+      <button type="submit">✨ Publier</button>
+    </form>
+    <p id="publish-status" role="status"></p>
+  </div>
+
+  <div id="student-posts">
+    <h3>📜 Le tableau des nouvelles</h3>
+    <div id="student-posts-list"></div>
+  </div>
+ 
     <h2>👤 Ma salle commune</h2>
     <p id="profile-name"></p>
     <p id="profile-email" class="muted"></p>

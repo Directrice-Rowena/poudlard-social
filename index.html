@@ -365,6 +365,98 @@ client.auth.getSession().then(({ data, error }) => {
   }
   refreshProfile(data.session?.user || null);
 });
+
+async function chargerPublications() {
+  const statut = document.getElementById("posts-status");
+  const liste = document.getElementById("posts-list");
+
+  statut.textContent = "Chargement des publications...";
+  liste.replaceChildren();
+
+  const estDirectrice = await verifierDirectrice();
+
+  if (!estDirectrice) {
+    statut.textContent = "Accès réservé à la directrice.";
+    return;
+  }
+
+  const { data: publications, error } = await client
+    .from("posts")
+    .select("id, user_id, content, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    statut.textContent = "Erreur de chargement : " + error.message;
+    return;
+  }
+
+  if (!publications || publications.length === 0) {
+    statut.textContent = "Aucune publication pour le moment.";
+    return;
+  }
+
+  const identifiants = [...new Set(publications.map(p => p.user_id))];
+
+  const { data: profils } = await client
+    .from("profiles")
+    .select("user_id, username")
+    .in("user_id", identifiants);
+
+  const noms = new Map(
+    (profils || []).map(p => [p.user_id, p.username])
+  );
+
+  for (const publication of publications) {
+    const carte = document.createElement("article");
+    const auteur = document.createElement("p");
+    const contenu = document.createElement("p");
+    const date = document.createElement("small");
+    const supprimer = document.createElement("button");
+
+    auteur.textContent =
+      "🧙 Élève : " + (noms.get(publication.user_id) || "Élève inconnu");
+
+    contenu.textContent = publication.content;
+
+    date.textContent =
+      new Date(publication.created_at).toLocaleString("fr-FR");
+
+    supprimer.type = "button";
+    supprimer.textContent = "🗑️ Supprimer cette publication";
+
+    supprimer.addEventListener("click", async () => {
+      if (!confirm("Supprimer définitivement cette publication ?")) {
+        return;
+      }
+
+      supprimer.disabled = true;
+
+      const { error: erreurSuppression } = await client
+        .from("posts")
+        .delete()
+        .eq("id", publication.id);
+
+      if (erreurSuppression) {
+        statut.textContent =
+          "Suppression impossible : " + erreurSuppression.message;
+        supprimer.disabled = false;
+        return;
+      }
+
+      carte.remove();
+      statut.textContent = "Publication supprimée.";
+    });
+
+    carte.append(auteur, contenu, date, supprimer);
+    liste.appendChild(carte);
+  }
+
+  statut.textContent = publications.length + " publication(s) chargée(s).";
+}
+
+document.getElementById("reload-posts")
+  ?.addEventListener("click", chargerPublications);
+
 </script>
 </body>
 </html>

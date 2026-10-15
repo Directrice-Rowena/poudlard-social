@@ -197,7 +197,16 @@ const client = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+async function verifierDirectrice() {
+  const { data, error } = await client.rpc("is_admin");
 
+  if (error) {
+    console.error("Erreur de vérification :", error.message);
+    return false;
+  }
+
+  return data === true;
+}
 const message = document.getElementById("message");
 const profile = document.getElementById("profil");
 

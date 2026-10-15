@@ -263,6 +263,11 @@ if (estDirectrice) {
 } else {
   showMessage("Connexion réussie. Bienvenue à Poudlard ! ✨");
 }
+const panneauAdmin = document.getElementById("admin-panel");
+
+if (panneauAdmin) {
+  panneauAdmin.hidden = !estDirectrice;
+}  
 }
 document.getElementById("signup-form").addEventListener("submit", async (event) => {
   event.preventDefault();

@@ -242,9 +242,14 @@ async function refreshProfile(user) {
   document.getElementById("profile-house").textContent =
     data?.house ? "Maison : " + data.house : "Ta maison sera définie plus tard.";
 
+const estDirectrice = await verifierDirectrice();
+
+if (estDirectrice) {
+  showMessage("Bienvenue, Directrice Rowena ! 👑✨");
+} else {
   showMessage("Connexion réussie. Bienvenue à Poudlard ! ✨");
 }
-
+}
 document.getElementById("signup-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   showMessage("Création du compte en cours…");

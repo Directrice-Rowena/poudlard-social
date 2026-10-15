@@ -199,13 +199,13 @@ const client = window.supabase.createClient(
 );
 async function verifierDirectrice() {
   const { data, error } = await client.rpc("is_admin");
+if (error) {
+  console.error("Erreur de vérification :", error);
+  showMessage("Vérification Directrice impossible : " + error.message);
+  return false;
+}
 
-  if (error) {
-    console.error("Erreur de vérification :", error.message);
-    return false;
-  }
-
-  return data === true;
+return data === true;
 }
 const message = document.getElementById("message");
 const profile = document.getElementById("profil");

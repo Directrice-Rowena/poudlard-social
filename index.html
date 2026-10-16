@@ -479,6 +479,98 @@ async function chargerPublications() {
 document.getElementById("reload-posts")
   ?.addEventListener("click", chargerPublications);
 
+async function chargerPublicationsEleves() {
+  const liste = document.getElementById("student-posts-list");
+  if (!liste) return;
+
+  liste.replaceChildren();
+
+  const statut = document.getElementById("publish-status");
+  const { data: publications, error } = await client
+    .from("posts")
+    .select("id, user_id, content, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    if (statut) statut.textContent = "Impossible de charger les nouvelles.";
+    return;
+  }
+
+  const ids = [...new Set((publications || []).map(p => p.user_id))];
+  let noms = new Map();
+
+  if (ids.length) {
+    const { data: profils } = await client
+      .from("profiles")
+      .select("user_id, username")
+      .in("user_id", ids);
+
+    noms = new Map((profils || []).map(p => [p.user_id, p.username]));
+  }
+
+  for (const publication of publications || []) {
+    const carte = document.createElement("article");
+    const auteur = document.createElement("h4");
+    const contenu = document.createElement("p");
+    const date = document.createElement("small");
+
+    auteur.textContent = "🧙 " +
+      (noms.get(publication.user_id) || "Élève de Poudlard");
+    contenu.textContent = publication.content;
+    date.textContent = new Date(publication.created_at).toLocaleString("fr-FR");
+
+    carte.append(auteur, contenu, date);
+    liste.appendChild(carte);
+  }
+
+  if (statut) statut.textContent = "";
+}
+
+document.getElementById("create-post-form")
+  ?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const champ = document.getElementById("post-content");
+    const statut = document.getElementById("publish-status");
+    const bouton = event.currentTarget.querySelector('button[type="submit"]');
+    const message = champ.value.trim();
+
+    if (!message) {
+      statut.textContent = "Écris un message avant de publier.";
+      return;
+    }
+
+    bouton.disabled = true;
+    statut.textContent = "Publication en cours...";
+
+    try {
+      const { data: { user }, error: erreurConnexion } =
+        await client.auth.getUser();
+
+      if (erreurConnexion || !user) {
+        statut.textContent = "Reconnecte-toi pour publier.";
+        return;
+      }
+
+      const { error } = await client
+        .from("posts")
+        .insert({ user_id: user.id, content: message });
+
+      if (error) {
+        statut.textContent = "Erreur : " + error.message;
+        return;
+      }
+
+      champ.value = "";
+      statut.textContent = "✨ Ta publication est affichée à Poudlard !";
+      await chargerPublicationsEleves();
+    } catch (erreur) {
+      statut.textContent = "Une erreur inattendue est survenue.";
+    } finally {
+      bouton.disabled = false;
+    }
+  });
+
 </script>
 </body>
 </html>

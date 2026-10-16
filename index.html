@@ -96,29 +96,6 @@ footer { text-align: center; padding: 26px; color: var(--muted); }
 </style>
 </head>
 
-<section id="admin-panel" hidden>
-  <h2>👑 Bureau de la Directrice Rowena</h2>
-  <p>Bienvenue dans ton espace d’administration de Poudlard.</p>
-
-  <h3>🛡️ Modération</h3>
-  <p>Tu pourras consulter les publications des élèves et retirer celles qui ne respectent pas les règles.</p>
-
-  <h3>📣 Événements</h3>
-  <p>Tu pourras préparer les matchs de Quidditch et les activités de l’école.</p>
-
-  <p id="admin-status" role="status"></p>
-  
-<div class="admin-posts">
-  <h3>📜 Publications des élèves</h3>
-  <button type="button" id="reload-posts">
-    🔄 Actualiser les publications
-  </button>
-  <p id="posts-status" role="status"></p>
-  <div id="posts-list"></div>
-</div>
-
-</section>
-
 <body>
 <header>
   <div class="moon">🌙 ✨ 🏰</div>
@@ -225,11 +202,29 @@ footer { text-align: center; padding: 26px; color: var(--muted); }
     <p class="muted">Les annonces de la direction seront ajoutées dans une prochaine étape.</p>
   </section>
 
-  <section class="card" id="direction">
+ 
+  <section class="card" id="admin-panel" hidden>
     <h2>👑 Bureau de la Directrice Rowena</h2>
-    <p>La gestion des événements et la modération seront ajoutées progressivement.</p>
-    <p class="muted">L’administration n’est pas encore activée. La connexion à un compte ne donne pas de privilèges de direction.</p>
+    <p>Bienvenue dans ton espace d’administration de Poudlard.</p>
+
+    <h3>🛡️ Modération</h3>
+    <p>Tu pourras consulter les publications des élèves et retirer celles qui ne respectent pas les règles.</p>
+
+    <h3>📣 Événements</h3>
+    <p>Tu pourras préparer les matchs de Quidditch et les activités de l’école.</p>
+
+    <p id="admin-status" role="status"></p>
+
+    <div class="admin-posts">
+      <h3>📜 Publications des élèves</h3>
+      <button type="button" id="reload-posts">
+        🔄 Actualiser les publications
+      </button>
+      <p id="posts-status" role="status"></p>
+      <div id="posts-list"></div>
+    </div>
   </section>
+
 </main>
 
 <footer>Poudlard · Notre communauté magique ✨</footer>

@@ -519,7 +519,41 @@ async function chargerPublicationsEleves() {
     contenu.textContent = publication.content;
     date.textContent = new Date(publication.created_at).toLocaleString("fr-FR");
 
-    carte.append(auteur, contenu, date);
+   
+
+carte.append(auteur, contenu, date);
+
+const { data: { user } } = await client.auth.getUser();
+
+if (user && user.id === publication.user_id) {
+  const supprimer = document.createElement("button");
+  supprimer.type = "button";
+  supprimer.textContent = "🗑️ Supprimer ma publication";
+
+  supprimer.addEventListener("click", async () => {
+    if (!confirm("Veux-tu vraiment supprimer ta publication ?")) return;
+
+    supprimer.disabled = true;
+
+    const { error } = await client
+      .from("posts")
+      .delete()
+      .eq("id", publication.id)
+      .eq("user_id", user.id);
+
+    if (error) {
+      if (statut) statut.textContent = "Suppression impossible : " + error.message;
+      supprimer.disabled = false;
+      return;
+    }
+
+    carte.remove();
+    if (statut) statut.textContent = "Publication supprimée ! ✨";
+  });
+
+  carte.appendChild(supprimer);
+}
+
     liste.appendChild(carte);
   }
 

@@ -638,8 +638,55 @@ async function chargerSignalements() {
       new Date(signalement.created_at).toLocaleString("fr-FR");
 
     etat.textContent = "Statut : " + signalement.statut;
+const choixStatut = document.createElement("select");
 
-    carte.append(auteur, motif, description, date, etat);
+const statutsDisponibles = [
+  { valeur: "nouveau", texte: "🆕 Nouveau" },
+  { valeur: "en_cours", texte: "🔎 En cours" },
+  { valeur: "traite", texte: "✅ Traité" }
+];
+
+for (const statutOption of statutsDisponibles) {
+  const option = document.createElement("option");
+  option.value = statutOption.valeur;
+  option.textContent = statutOption.texte;
+  choixStatut.appendChild(option);
+}
+
+choixStatut.value = signalement.statut;
+
+choixStatut.addEventListener("change", async () => {
+  const ancienStatut = signalement.statut;
+  const nouveauStatut = choixStatut.value;
+
+  choixStatut.disabled = true;
+
+  const { error } = await client
+    .from("signalements")
+    .update({ statut: nouveauStatut })
+    .eq("id", signalement.id);
+
+  if (error) {
+    choixStatut.value = ancienStatut;
+    statut.textContent =
+      "Impossible de modifier le statut : " + error.message;
+    choixStatut.disabled = false;
+    return;
+  }
+
+  signalement.statut = nouveauStatut;
+  etat.textContent = "Statut : " + nouveauStatut;
+  statut.textContent = "Statut du signalement mis à jour. ✅";
+  choixStatut.disabled = false;
+});
+ carte.append(
+  auteur,
+  motif,
+  description,
+  date,
+  etat,
+  choixStatut
+);
     liste.appendChild(carte);
   }
 

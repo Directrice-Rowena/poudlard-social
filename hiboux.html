@@ -1,0 +1,153 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Hiboux | Poudlard Social</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      color: #edf1ff;
+      background: #10182b;
+    }
+    header {
+      padding: 24px 16px;
+      text-align: center;
+      background: #192541;
+      border-bottom: 1px solid #465574;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px;
+      background: #141f37;
+    }
+    nav a {
+      color: #e1d3ff;
+      text-decoration: none;
+    }
+    main {
+      width: min(850px, 92%);
+      margin: 24px auto;
+    }
+    .card {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #3a4969;
+      border-radius: 16px;
+      background: #192541;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(250px, 2fr);
+      gap: 18px;
+    }
+    .conversation {
+      margin: 10px 0;
+      padding: 12px;
+      border: 1px solid #3a4969;
+      border-radius: 10px;
+      background: #141f37;
+    }
+    .muted {
+      color: #b9c5df;
+    }
+    label {
+      display: block;
+      margin: 14px 0 8px;
+    }
+    input, textarea, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #526487;
+      border-radius: 8px;
+      font: inherit;
+    }
+    input, textarea {
+      color: #edf1ff;
+      background: #10182b;
+    }
+    button {
+      margin-top: 12px;
+      color: white;
+      background: #514276;
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🦉 Les Hiboux</h1>
+    <p>Le courrier magique de Poudlard Social</p>
+  </header>
+
+  <nav>
+    <a href="accueil.html">Accueil</a>
+    <a href="profil.html">Mon profil</a>
+    <a href="maisons.html">Les maisons</a>
+    <a href="comptes.html">Comptes</a>
+    <a href="evenements.html">Événements</a>
+    <a href="hiboux.html">Les Hiboux</a>
+    <a href="bureau.html">Bureau de la Directrice</a>
+  </nav>
+
+  <main>
+    <section class="card">
+      <h2>✉️ Ta volière personnelle</h2>
+      <p class="muted">
+        Ici se trouveront tes conversations privées avec les autres membres
+        et la Directrice.
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="card">
+        <h2>📜 Conversations</h2>
+        <div class="conversation">
+          <strong>👑 La Directrice</strong>
+          <p class="muted">Tes échanges avec le bureau de la Directrice.</p>
+        </div>
+        <div class="conversation">
+          <strong>🪄 Mes camarades</strong>
+          <p class="muted">Tes conversations avec les élèves.</p>
+        </div>
+        <p class="muted">Les conversations réelles apparaîtront après connexion à la base de données.</p>
+      </section>
+
+      <section class="card">
+        <h2>💌 Nouveau hibou</h2>
+        <form id="message-form">
+          <label for="recipient">Destinataire</label>
+          <input id="recipient" type="text" placeholder="Nom du membre" required>
+
+          <label for="message">Ton message</label>
+          <textarea id="message" rows="6" maxlength="2000"
+            placeholder="Écris ton message ici..." required></textarea>
+
+          <button type="submit">🪶 Préparer le hibou</button>
+        </form>
+        <p id="message-status" class="muted" role="status"></p>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("message-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      document.getElementById("message-status").textContent =
+        "Ton hibou est prêt en maquette ! L'envoi réel sera activé dans une prochaine étape.";
+    });
+  </script>
+</body>
+</html>
+```

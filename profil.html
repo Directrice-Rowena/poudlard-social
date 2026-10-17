@@ -149,6 +149,46 @@ button {
 nav a:hover {
   color: var(--house-secondary);
 }
+    
+/* Thème de la maison sur l'ensemble du profil */
+body[data-house="Serpentard"],
+body[data-house="Slytherin"] {
+  background: #0d211c;
+}
+
+body[data-house="Gryffondor"],
+body[data-house="Gryffindor"] {
+  background: #2a1118;
+}
+
+body[data-house="Serdaigle"],
+body[data-house="Ravenclaw"] {
+  background: #101e32;
+}
+
+body[data-house="Poufsouffle"],
+body[data-house="Hufflepuff"] {
+  background: #292516;
+}
+
+body[data-house] header {
+  border-bottom: 2px solid var(--house-secondary);
+}
+
+body[data-house] h1,
+body[data-house] h2,
+body[data-house] h3 {
+  color: var(--house-secondary);
+}
+
+body[data-house] .card {
+  box-shadow: 0 0 14px color-mix(
+    in srgb,
+    var(--house-primary) 35%,
+    transparent
+  );
+}
+
 
   </style>
 </head>

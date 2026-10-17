@@ -93,12 +93,16 @@ label { color: var(--muted); }
 #message { white-space: pre-wrap; overflow-wrap: anywhere; }
 .hidden { display: none; }
   
-body.mode-directrice header,
-body.mode-directrice #menu-principal,
-body.mode-directrice footer,
-body.mode-directrice #contenu-principal > section:not(#admin-panel) {
+
+.hidden {
   display: none;
 }
+
+body.mode-directrice header,
+body.mode-directrice footer {
+  display: none;
+}
+
 
 footer { text-align: center; padding: 26px; color: var(--muted); }
 </style>

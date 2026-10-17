@@ -575,6 +575,81 @@ async function chargerPublications() {
 document.getElementById("reload-posts")
   ?.addEventListener("click", chargerPublications);
 
+async function chargerSignalements() {
+  const statut = document.getElementById("reports-status");
+  const liste = document.getElementById("reports-list");
+
+  statut.textContent = "Chargement des signalements...";
+  liste.replaceChildren();
+
+  const estDirectrice = await verifierDirectrice();
+
+  if (!estDirectrice) {
+    statut.textContent = "Accès réservé à la Directrice.";
+    return;
+  }
+
+  const { data: signalements, error } = await client
+    .from("signalements")
+    .select("id, auteur_id, motif, description, statut, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    statut.textContent = "Erreur de chargement : " + error.message;
+    return;
+  }
+
+  if (!signalements || signalements.length === 0) {
+    statut.textContent = "Aucun signalement pour le moment.";
+    return;
+  }
+
+  const identifiants = [
+    ...new Set(signalements.map(s => s.auteur_id))
+  ];
+
+  const { data: profils, error: erreurProfils } = await client
+    .from("profiles")
+    .select("user_id, username")
+    .in("user_id", identifiants);
+
+  const noms = new Map(
+    (profils || []).map(p => [p.user_id, p.username])
+  );
+
+  for (const signalement of signalements) {
+    const carte = document.createElement("article");
+    const auteur = document.createElement("p");
+    const motif = document.createElement("p");
+    const description = document.createElement("p");
+    const date = document.createElement("small");
+    const etat = document.createElement("p");
+
+    auteur.textContent =
+      "🧙 Élève : " +
+      (noms.get(signalement.auteur_id) || "Élève inconnu");
+
+    motif.textContent = "Motif : " + signalement.motif;
+
+    description.textContent =
+      "Description : " + (signalement.description || "Aucune précision.");
+
+    date.textContent =
+      new Date(signalement.created_at).toLocaleString("fr-FR");
+
+    etat.textContent = "Statut : " + signalement.statut;
+
+    carte.append(auteur, motif, description, date, etat);
+    liste.appendChild(carte);
+  }
+
+  statut.textContent =
+    signalements.length + " signalement(s) chargé(s).";
+}
+
+document.getElementById("reload-reports")
+  ?.addEventListener("click", chargerSignalements);
+
 async function chargerPublicationsEleves() {
   const liste = document.getElementById("student-posts-list");
   if (!liste) return;

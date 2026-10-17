@@ -69,6 +69,90 @@
     .muted {
       color: #b9c5df;
     }
+    
+/* Cartes des publications */
+.publication {
+  background: #111e30;
+  border: 1px solid #34465d;
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 18px;
+  color: #f1f4f9;
+}
+
+/* En-tête avec photo et identité */
+.publication-entete {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.publication-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #174c3a;
+  border: 2px solid #c4c8cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.publication-identite {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.publication-identite strong {
+  color: #ffffff;
+}
+
+.publication-identite span {
+  color: #aab7c8;
+  font-size: 13px;
+}
+
+/* Petit cœur de la maison */
+.coeur-maison {
+  margin-left: auto;
+  font-size: 25px;
+}
+
+.coeur-maison.serpentard {
+  color: #52b788;
+}
+
+.coeur-maison.gryffondor {
+  color: #e85d5d;
+}
+
+.coeur-maison.serdaigle {
+  color: #70a7ef;
+}
+
+.coeur-maison.poufsouffle {
+  color: #f2d45c;
+}
+
+/* Texte et actions */
+.publication-texte {
+  line-height: 1.7;
+  margin: 20px 0;
+}
+
+.publication-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  border-top: 1px solid #34465d;
+  padding-top: 14px;
+  color: #c5cfdd;
+  font-size: 14px;
+}
+
   </style>
 </head>
 <body>
@@ -115,15 +199,35 @@
       </div>
     </section>
 
-    <section class="card">
-      <h2>📜 Le fil d’actualité</h2>
-      <p class="muted">
-        Les publications de tous les élèves apparaîtront ici.
-      </p>
-      <p>
-        La connexion aux vraies publications sera ajoutée dans une prochaine étape.
-      </p>
-    </section>
+ 
+<section class="card">
+  <h2>📜 Le fil d’actualité</h2>
+  <p class="muted">
+    Les nouvelles de toute la communauté de Poudlard.
+  </p>
+
+  <article class="publication">
+    <div class="publication-entete">
+      <div class="publication-photo">🐍</div>
+      <div class="publication-identite">
+        <strong>Lucie Blackhood</strong>
+        <span>Serpentard · À l’instant</span>
+      </div>
+      <span class="coeur-maison serpentard" title="Serpentard">♥</span>
+    </div>
+
+    <p class="publication-texte">
+      Bienvenue à Poudlard ! 💚
+      Hâte de découvrir vos nouvelles dans le château.
+    </p>
+
+    <div class="publication-actions">
+      <span>♡ J’aime</span>
+      <span>💬 Commenter</span>
+    </div>
+  </article>
+</section>
+
   </main>
 </body>
 </html>

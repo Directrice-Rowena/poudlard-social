@@ -173,7 +173,7 @@ nav a:hover {
       <div class="photo">📷</div>
       <h2>Mon identité à Poudlard</h2>
       <p class="muted">Ton profil pourra accueillir ta photo, ta maison et ta biographie.</p>
-      <p>🏰 Ma maison : à renseigner</p>
+     <p id="house-display">🏰 Ma maison : à renseigner</p>
     </section>
 
     <section class="card">
@@ -207,16 +207,30 @@ nav a:hover {
     </section>
   </main>
   
+
 <script>
   const houseInput = document.getElementById("house");
 
   function updateHouseColors() {
-    document.body.dataset.house = houseInput.value.trim();
+    if (!houseInput) return;
+
+    const house = houseInput.value.trim();
+    document.body.dataset.house = house;
+
+    const houseDisplay = document.getElementById("house-display");
+    if (houseDisplay) {
+      houseDisplay.textContent = house
+        ? "🏰 Ma maison : " + house
+        : "🏰 Ma maison : à renseigner";
+    }
   }
 
-  houseInput.addEventListener("input", updateHouseColors);
-  updateHouseColors();
+  if (houseInput) {
+    houseInput.addEventListener("input", updateHouseColors);
+    updateHouseColors();
+  }
 </script>
+
 
 </body>
 </html>

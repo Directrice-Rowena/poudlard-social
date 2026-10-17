@@ -92,6 +92,14 @@ label { color: var(--muted); }
 .huffle { color: #f0d45b; }
 #message { white-space: pre-wrap; overflow-wrap: anywhere; }
 .hidden { display: none; }
+  
+body.mode-directrice header,
+body.mode-directrice #menu-principal,
+body.mode-directrice footer,
+body.mode-directrice #contenu-principal > section:not(#admin-panel) {
+  display: none;
+}
+
 footer { text-align: center; padding: 26px; color: var(--muted); }
 </style>
 </head>
@@ -295,11 +303,23 @@ if (panneauAdmin) {
   panneauAdmin.hidden = !estDirectrice;
 }
 
+
+document.body.classList.toggle("mode-directrice", estDirectrice);
+
+const menuPrincipal = document.getElementById("menu-principal");
+if (menuPrincipal) {
+  menuPrincipal.classList.toggle("hidden", estDirectrice);
+}
+
+const profil = document.getElementById("profil");
+if (profil) {
+  profil.classList.toggle("hidden", estDirectrice);
+}
+
 if (estDirectrice) {
-  document.getElementById("menu-principal").classList.add("hidden");
-  document.getElementById("contenu-principal").classList.add("hidden");
-  document.getElementById("profil").classList.add("hidden");
   document.getElementById("admin-panel").scrollIntoView({ behavior: "smooth" });
+}
+
 }
 
 

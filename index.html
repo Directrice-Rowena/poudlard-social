@@ -205,6 +205,27 @@ footer { text-align: center; padding: 26px; color: var(--muted); }
     <p id="profile-name"></p>
     <p id="profile-email" class="muted"></p>
     <p id="profile-house" class="muted">Ta maison pourra être renseignée plus tard.</p>
+    <div id="profile-customization">
+  <h3>✨ Personnaliser mon profil</h3>
+
+  <label for="profile-bio">Ma biographie</label>
+  <textarea
+    id="profile-bio"
+    maxlength="500"
+    rows="4"
+    placeholder="Raconte un peu qui tu es, tes passions, tes matières préférées..."
+  ></textarea>
+
+  <p class="muted">
+    Ta photo de profil et les couleurs de ta maison seront ajoutées dans les prochaines étapes.
+  </p>
+
+  <button type="button" id="save-profile-button">
+    💾 Enregistrer mon profil
+  </button>
+
+  <p id="profile-save-status" role="status"></p>
+</div>
     <button id="logout-button" type="button">Se déconnecter</button>
   </section>
 

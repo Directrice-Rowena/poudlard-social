@@ -296,11 +296,13 @@ if (panneauAdmin) {
 }
 
 if (estDirectrice) {
+  document.getElementById("menu-principal").classList.add("hidden");
+  document.getElementById("contenu-principal").classList.add("hidden");
   document.getElementById("profil").classList.add("hidden");
   document.getElementById("admin-panel").scrollIntoView({ behavior: "smooth" });
 }
 
-}
+
 document.getElementById("signup-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   showMessage("Création du compte en cours…");

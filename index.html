@@ -314,7 +314,7 @@ async function refreshProfile(user) {
 
   const { data, error } = await client
     .from("profiles")
-    .select("username, house")
+   .select("username, house, bio")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -328,7 +328,7 @@ async function refreshProfile(user) {
 
   document.getElementById("profile-house").textContent =
     data?.house ? "Maison : " + data.house : "Ta maison sera définie plus tard.";
-
+document.getElementById("profile-bio").value = data?.bio || "";
 const estDirectrice = await verifierDirectrice();
 
 if (estDirectrice) {
@@ -363,6 +363,32 @@ if (estDirectrice) {
   document.getElementById("admin-panel").scrollIntoView({ behavior: "smooth" });
 }
 }
+ document.getElementById("save-profile-button").addEventListener("click", async () => {
+  const status = document.getElementById("profile-save-status");
+  status.textContent = "Enregistrement en cours…";
+
+  const { data: { user }, error: userError } = await client.auth.getUser();
+
+  if (userError || !user) {
+    status.textContent = "Connecte-toi pour enregistrer ton profil.";
+    return;
+  }
+
+  const bio = document.getElementById("profile-bio").value.trim();
+
+  const { error } = await client
+    .from("profiles")
+    .update({ bio })
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("Erreur d’enregistrement du profil :", error);
+    status.textContent = "La biographie n’a pas pu être enregistrée. " + error.message;
+    return;
+  }
+
+  status.textContent = "Ta biographie a été enregistrée ! ✨";
+}); 
 document.getElementById("signup-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   showMessage("Création du compte en cours…");

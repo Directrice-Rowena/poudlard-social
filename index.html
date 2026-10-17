@@ -333,6 +333,7 @@ if (panneauAdmin) {
 
 document.body.classList.toggle("mode-directrice", estDirectrice);
 
+
 const menuPrincipal = document.getElementById("menu-principal");
 if (menuPrincipal) {
   menuPrincipal.classList.toggle("hidden", estDirectrice);
@@ -346,9 +347,6 @@ if (profil) {
 if (estDirectrice) {
   document.getElementById("admin-panel").scrollIntoView({ behavior: "smooth" });
 }
-
-}
-
 
 document.getElementById("signup-form").addEventListener("submit", async (event) => {
   event.preventDefault();

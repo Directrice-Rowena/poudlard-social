@@ -4,9 +4,127 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil | Poudlard Social</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      color: #edf1ff;
+      background: #10182b;
+    }
+    header {
+      padding: 22px 16px;
+      text-align: center;
+      background: #192541;
+      border-bottom: 1px solid #465574;
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px;
+      background: #141f37;
+    }
+    nav a {
+      color: #e1d3ff;
+      text-decoration: none;
+    }
+    main {
+      width: min(700px, 92%);
+      margin: 24px auto;
+    }
+    .card {
+      margin-bottom: 20px;
+      padding: 18px;
+      border: 1px solid #3a4969;
+      border-radius: 16px;
+      background: #192541;
+    }
+    .stories {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding: 10px 2px;
+    }
+    .story {
+      min-width: 72px;
+      text-align: center;
+      font-size: 13px;
+    }
+    .circle {
+      display: grid;
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 8px;
+      place-items: center;
+      border: 3px solid #a58bd4;
+      border-radius: 50%;
+      background: #26395d;
+      font-size: 25px;
+    }
+    .muted {
+      color: #b9c5df;
+    }
+  </style>
 </head>
 <body>
-  <h1>Bienvenue à Poudlard ! 🏰</h1>
-  <p>Notre nouvelle salle commune se prépare...</p>
+  <header>
+    <h1>🏰 Poudlard Social</h1>
+    <p>Le monde magique se retrouve ici</p>
+  </header>
+
+  <nav>
+    <a href="accueil.html">Accueil</a>
+    <a href="profil.html">Mon profil</a>
+    <a href="maisons.html">Les maisons</a>
+    <a href="comptes.html">Comptes</a>
+    <a href="evenements.html">Événements</a>
+    <a href="hiboux.html">Les Hiboux</a>
+    <a href="bureau.html">Bureau de la Directrice</a>
+  </nav>
+
+  <main>
+    <section class="card">
+      <h2>✨ Les Stories</h2>
+      <p class="muted">Les dernières nouvelles des élèves</p>
+      <div class="stories">
+        <div class="story">
+          <div class="circle">＋</div>
+          Ma Story
+        </div>
+        <div class="story">
+          <div class="circle">🐍</div>
+          Lucie
+        </div>
+        <div class="story">
+          <div class="circle">🪄</div>
+          Drago
+        </div>
+        <div class="story">
+          <div class="circle">🦉</div>
+          Évangéline
+        </div>
+        <div class="story">
+          <div class="circle">✨</div>
+          Les élèves
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>📜 Le fil d’actualité</h2>
+      <p class="muted">
+        Les publications de tous les élèves apparaîtront ici.
+      </p>
+      <p>
+        La connexion aux vraies publications sera ajoutée dans une prochaine étape.
+      </p>
+    </section>
+  </main>
 </body>
 </html>
+

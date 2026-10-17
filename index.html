@@ -211,6 +211,29 @@ footer { text-align: center; padding: 26px; color: var(--muted); }
   </section>
 
  
+  <section class="card" id="signalement-section">
+    <h2>🛡️ Contacter la Directrice</h2>
+    <p>Tu peux signaler un problème sur Poudlard Social. Ton signalement restera confidentiel.</p>
+
+    <form id="signalement-form">
+      <label for="signalement-motif">Motif du signalement</label>
+      <select id="signalement-motif" required>
+        <option value="">Choisir un motif</option>
+        <option value="insulte">Insulte ou humiliation</option>
+        <option value="harcelement">Harcèlement</option>
+        <option value="menace">Menace</option>
+        <option value="publication">Publication inappropriée</option>
+        <option value="autre">Autre problème</option>
+      </select>
+
+      <label for="signalement-description">Explique ce qui s’est passé</label>
+      <textarea id="signalement-description" rows="4" required maxlength="2000"></textarea>
+
+      <button type="submit">📨 Envoyer à la Directrice</button>
+      <p id="signalement-status" role="status"></p>
+    </form>
+  </section>
+
   <section class="card" id="admin-panel" hidden>
     <h2>👑 Bureau de la Directrice Rowena</h2>
     <p>Bienvenue dans ton espace d’administration de Poudlard.</p>
@@ -356,6 +379,40 @@ document.getElementById("signup-form").addEventListener("submit", async (event) 
   } else {
     showMessage("Compte créé ! Consulte ta boîte e-mail et confirme ton adresse avant de te connecter.");
   }
+});
+
+document.getElementById("signalement-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const status = document.getElementById("signalement-status");
+  status.textContent = "Envoi du signalement en cours…";
+
+  const { data: { user }, error: userError } = await client.auth.getUser();
+
+  if (userError || !user) {
+    status.textContent = "Connecte-toi à ton compte pour envoyer un signalement.";
+    return;
+  }
+
+  const motif = document.getElementById("signalement-motif").value;
+  const description = document.getElementById("signalement-description").value.trim();
+
+  const { error } = await client
+    .from("signalements")
+    .insert({
+      auteur_id: user.id,
+      motif,
+      description
+    });
+
+  if (error) {
+    console.error("Erreur de signalement :", error);
+    status.textContent = "Le signalement n’a pas pu être envoyé. Réessaie plus tard.";
+    return;
+  }
+
+  status.textContent = "Ton signalement a bien été transmis à la Directrice. 🛡️";
+  document.getElementById("signalement-form").reset();
 });
 
 document.getElementById("login-form").addEventListener("submit", async (event) => {

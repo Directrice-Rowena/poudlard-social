@@ -153,5 +153,46 @@
       Une communauté magique, unie au-delà des maisons.
     </p>
   </main>
+  
+<script>
+  const SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk";
+
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  const form = document.getElementById("login-form");
+  const status = document.getElementById("login-status");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    status.textContent = "🪄 Ouverture des portes de Poudlard...";
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    try {
+      const { error } = await client.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        status.textContent =
+          "Connexion impossible. Vérifie ton e-mail et ton mot de passe.";
+        return;
+      }
+
+      status.textContent = "Connexion réussie !";
+      window.location.href = "accueil.html";
+    } catch (error) {
+      status.textContent =
+        "Impossible de contacter le serveur. Réessaie plus tard.";
+    }
+  });
+</script>
+
 </body>
 </html>

@@ -81,6 +81,64 @@
       background: #514276;
       cursor: pointer;
     }
+    
+/* Couleurs des quatre maisons de Poudlard */
+:root {
+  --house-primary: #17243b;
+  --house-secondary: #aeb8c7;
+  --house-text: #ffffff;
+}
+
+/* Serpentard */
+body[data-house="Serpentard"],
+body[data-house="Slytherin"] {
+  --house-primary: #174c3a;
+  --house-secondary: #c4c8cc;
+}
+
+/* Gryffondor */
+body[data-house="Gryffondor"],
+body[data-house="Gryffindor"] {
+  --house-primary: #7d1825;
+  --house-secondary: #d6ad55;
+}
+
+/* Serdaigle */
+body[data-house="Serdaigle"],
+body[data-house="Ravenclaw"] {
+  --house-primary: #173c65;
+  --house-secondary: #946b43;
+}
+
+/* Poufsouffle */
+body[data-house="Poufsouffle"],
+body[data-house="Hufflepuff"] {
+  --house-primary: #d5ad32;
+  --house-secondary: #252525;
+}
+
+/* Application des couleurs au profil */
+header {
+  border-bottom-color: var(--house-secondary);
+}
+
+.card {
+  border-color: var(--house-secondary);
+}
+
+.photo {
+  border-color: var(--house-secondary);
+}
+
+button {
+  background: var(--house-primary);
+  border-color: var(--house-secondary);
+}
+
+nav a:hover {
+  color: var(--house-secondary);
+}
+
   </style>
 </head>
 <body>
@@ -137,6 +195,18 @@
       <p class="muted">Tes Stories à la une et tes publications personnelles trouveront leur place ici.</p>
     </section>
   </main>
+  
+<script>
+  const houseInput = document.getElementById("house");
+
+  function updateHouseColors() {
+    document.body.dataset.house = houseInput.value.trim();
+  }
+
+  houseInput.addEventListener("input", updateHouseColors);
+  updateHouseColors();
+</script>
+
 </body>
 </html>
 ```

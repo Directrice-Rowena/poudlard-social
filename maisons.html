@@ -1,0 +1,133 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les maisons | Poudlard Social</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      color: #edf1ff;
+      background: #10182b;
+    }
+    header {
+      padding: 24px 16px;
+      text-align: center;
+      background: #192541;
+      border-bottom: 1px solid #465574;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px;
+      background: #141f37;
+    }
+    nav a {
+      color: #e1d3ff;
+      text-decoration: none;
+    }
+    main {
+      width: min(850px, 92%);
+      margin: 24px auto;
+    }
+    .intro, .house {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #3a4969;
+      border-radius: 16px;
+      background: #192541;
+    }
+    .intro {
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+    .house {
+      text-align: center;
+    }
+    .crest {
+      font-size: 48px;
+      margin: 8px;
+    }
+    .gryffondor {
+      border-top: 5px solid #b52d36;
+    }
+    .serpentard {
+      border-top: 5px solid #32966b;
+    }
+    .serdaigle {
+      border-top: 5px solid #477fc1;
+    }
+    .poufsouffle {
+      border-top: 5px solid #e2c34e;
+    }
+    .muted {
+      color: #b9c5df;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏰 Les quatre maisons</h1>
+    <p>Quatre maisons, une seule communauté magique</p>
+  </header>
+
+  <nav>
+    <a href="accueil.html">Accueil</a>
+    <a href="profil.html">Mon profil</a>
+    <a href="maisons.html">Les maisons</a>
+    <a href="comptes.html">Comptes</a>
+    <a href="evenements.html">Événements</a>
+    <a href="hiboux.html">Les Hiboux</a>
+    <a href="bureau.html">Bureau de la Directrice</a>
+  </nav>
+
+  <main>
+    <section class="intro">
+      <h2>✨ Où est ta place ?</h2>
+      <p class="muted">
+        Le courage, l'ambition, la sagesse et la loyauté ont tous leur magie.
+        Découvre les quatre maisons de Poudlard !
+      </p>
+    </section>
+
+    <div class="grid">
+      <section class="house gryffondor">
+        <div class="crest">🦁</div>
+        <h2>Gryffondor</h2>
+        <p>Rouge et or</p>
+        <p class="muted">Courage, audace et détermination.</p>
+      </section>
+
+      <section class="house serpentard">
+        <div class="crest">🐍</div>
+        <h2>Serpentard</h2>
+        <p>Vert et argent</p>
+        <p class="muted">Ambition, ingéniosité et détermination.</p>
+      </section>
+
+      <section class="house serdaigle">
+        <div class="crest">🦅</div>
+        <h2>Serdaigle</h2>
+        <p>Bleu et bronze</p>
+        <p class="muted">Sagesse, curiosité et créativité.</p>
+      </section>
+
+      <section class="house poufsouffle">
+        <div class="crest">🦡</div>
+        <h2>Poufsouffle</h2>
+        <p>Jaune et noir</p>
+        <p class="muted">Loyauté, patience et justice.</p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
+```

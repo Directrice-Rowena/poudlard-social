@@ -150,10 +150,53 @@ Deviens qui tu as envie d’être.
       <a href="#inscription">Rejoindre Poudlard</a>
     </p>
 
-    <p class="notice">
-      Une communauté magique, unie au-delà des maisons.
-    </p>
-  </main>
+  
+<p class="notice">
+  Une communauté magique, unie au-delà des maisons.
+</p>
+
+<section id="inscription">
+  <h2>✨ Rejoindre Poudlard</h2>
+  <p>Crée ton identité magique et choisis le nom de ton personnage.</p>
+
+  <form id="signup-form">
+    <label for="signup-username">Nom de ton personnage</label>
+    <input
+      id="signup-username"
+      name="username"
+      type="text"
+      maxlength="30"
+      autocomplete="nickname"
+      placeholder="Ex. Lucie Blackhood"
+      required
+    >
+
+    <label for="signup-email">Adresse e-mail</label>
+    <input
+      id="signup-email"
+      name="signup-email"
+      type="email"
+      autocomplete="email"
+      placeholder="toi@exemple.fr"
+      required
+    >
+
+    <label for="signup-password">Mot de passe (6 caractères minimum)</label>
+    <input
+      id="signup-password"
+      name="signup-password"
+      type="password"
+      minlength="6"
+      autocomplete="new-password"
+      required
+    >
+
+    <button type="submit">🪄 Créer mon compte</button>
+    <p id="signup-status" role="status"></p>
+  </form>
+</section>
+</main>
+
   
 <script>
   const SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";

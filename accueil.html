@@ -411,7 +411,8 @@ header {
 </section>
 
   </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
   const SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
@@ -421,7 +422,37 @@ header {
     SUPABASE_URL,
     SUPABASE_KEY
   );
+
+  (async function afficherLienDirectrice() {
+    const { data: sessionData, error: sessionError } =
+      await client.auth.getSession();
+
+    if (sessionError || !sessionData.session) return;
+
+    const { data: estAdmin, error: adminError } =
+      await client.rpc("is_admin");
+
+    if (!adminError && estAdmin === true) {
+      const lien = document.getElementById("lien-bureau");
+      if (lien) lien.style.display = "inline";
+    }
+  })();
+  (async function afficherLienDirectrice() {
+  const { data: sessionData, error: sessionError } =
+    await client.auth.getSession();
+
+  if (sessionError || !sessionData.session) return;
+
+  const { data: estAdmin, error: adminError } =
+    await client.rpc("is_admin");
+
+  if (!adminError && estAdmin === true) {
+    const lien = document.getElementById("lien-bureau");
+    if (lien) lien.style.display = "inline";
+  }
+})();
 </script>
+
 </body>
 </html>
 

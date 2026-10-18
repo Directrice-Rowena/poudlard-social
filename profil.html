@@ -376,6 +376,9 @@ document.getElementById("save-profile").addEventListener(
     }
 
     message.textContent = "✨ Ton profil a été enregistré !";
+    document.body.dataset.house = house;
+document.getElementById("house-display").textContent =
+  "🏰 Ma maison : " + house;
   }
 );
 

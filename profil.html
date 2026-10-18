@@ -206,6 +206,164 @@ body[data-house="Slytherin"] .card h2 {
 }
 
 
+/* ===== PERSONNALISATION DES CHAMPS PAR MAISON ===== */
+
+/* Menu de sélection de la maison : argenté pour tous */
+select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #c4c8cc;
+  border-radius: 8px;
+  background: #aeb5bf;
+  color: #202735;
+  font: inherit;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid #d5d9de;
+  outline-offset: 2px;
+}
+
+/* SERPENTARD : champs argent foncé, écriture argent clair */
+body[data-house="Serpentard"] input,
+body[data-house="Serpentard"] textarea,
+body[data-house="Slytherin"] input,
+body[data-house="Slytherin"] textarea {
+  background: #737e89;
+  color: #f0f2f5;
+  border-color: #c4c8cc;
+}
+
+body[data-house="Serpentard"] input::placeholder,
+body[data-house="Serpentard"] textarea::placeholder,
+body[data-house="Slytherin"] input::placeholder,
+body[data-house="Slytherin"] textarea::placeholder {
+  color: #e0e4e9;
+  opacity: 1;
+}
+
+body[data-house="Serpentard"],
+body[data-house="Slytherin"] {
+  color: #d5d9de;
+}
+
+body[data-house="Serpentard"] label,
+body[data-house="Serpentard"] .muted,
+body[data-house="Serpentard"] nav a,
+body[data-house="Slytherin"] label,
+body[data-house="Slytherin"] .muted,
+body[data-house="Slytherin"] nav a {
+  color: #d5d9de;
+}
+
+/* GRYFFONDOR : bordeaux profond et écritures dorées */
+body[data-house="Gryffondor"],
+body[data-house="Gryffindor"] {
+  color: #e4bd68;
+}
+
+body[data-house="Gryffondor"] input,
+body[data-house="Gryffondor"] textarea,
+body[data-house="Gryffindor"] input,
+body[data-house="Gryffindor"] textarea {
+  background: #2a1118;
+  color: #e4bd68;
+  border-color: #a77b3e;
+}
+
+body[data-house="Gryffondor"] input::placeholder,
+body[data-house="Gryffondor"] textarea::placeholder,
+body[data-house="Gryffindor"] input::placeholder,
+body[data-house="Gryffindor"] textarea::placeholder {
+  color: #d6ad55;
+  opacity: 1;
+}
+
+body[data-house="Gryffondor"] label,
+body[data-house="Gryffondor"] .muted,
+body[data-house="Gryffondor"] nav a,
+body[data-house="Gryffondor"] h1,
+body[data-house="Gryffondor"] h2,
+body[data-house="Gryffondor"] h3,
+body[data-house="Gryffindor"] label,
+body[data-house="Gryffindor"] .muted,
+body[data-house="Gryffindor"] nav a,
+body[data-house="Gryffindor"] h1,
+body[data-house="Gryffindor"] h2,
+body[data-house="Gryffindor"] h3 {
+  color: #e4bd68;
+}
+
+/* SERDAIGLE : fonds actuels conservés, écritures argentées */
+body[data-house="Serdaigle"],
+body[data-house="Ravenclaw"] {
+  color: #d5d9de;
+}
+
+body[data-house="Serdaigle"] input,
+body[data-house="Serdaigle"] textarea,
+body[data-house="Ravenclaw"] input,
+body[data-house="Ravenclaw"] textarea {
+  color: #d5d9de;
+}
+
+body[data-house="Serdaigle"] label,
+body[data-house="Serdaigle"] .muted,
+body[data-house="Serdaigle"] nav a,
+body[data-house="Serdaigle"] h1,
+body[data-house="Serdaigle"] h2,
+body[data-house="Serdaigle"] h3,
+body[data-house="Ravenclaw"] label,
+body[data-house="Ravenclaw"] .muted,
+body[data-house="Ravenclaw"] nav a,
+body[data-house="Ravenclaw"] h1,
+body[data-house="Ravenclaw"] h2,
+body[data-house="Ravenclaw"] h3 {
+  color: #d5d9de;
+}
+
+/* POUFSOUFFLE : champs noirs, écriture dorée */
+body[data-house="Poufsouffle"] input,
+body[data-house="Poufsouffle"] textarea,
+body[data-house="Hufflepuff"] input,
+body[data-house="Hufflepuff"] textarea {
+  background: #080808;
+  color: #e4bd68;
+  border-color: #b99742;
+}
+
+body[data-house="Poufsouffle"] input::placeholder,
+body[data-house="Poufsouffle"] textarea::placeholder,
+body[data-house="Hufflepuff"] input::placeholder,
+body[data-house="Hufflepuff"] textarea::placeholder {
+  color: #d6ad55;
+  opacity: 1;
+}
+
+/* Autres écritures de Poufsouffle : gris foncé */
+body[data-house="Poufsouffle"],
+body[data-house="Hufflepuff"] {
+  color: #383838;
+}
+
+body[data-house="Poufsouffle"] label,
+body[data-house="Poufsouffle"] .muted,
+body[data-house="Poufsouffle"] nav a,
+body[data-house="Poufsouffle"] h1,
+body[data-house="Poufsouffle"] h2,
+body[data-house="Poufsouffle"] h3,
+body[data-house="Hufflepuff"] label,
+body[data-house="Hufflepuff"] .muted,
+body[data-house="Hufflepuff"] nav a,
+body[data-house="Hufflepuff"] h1,
+body[data-house="Hufflepuff"] h2,
+body[data-house="Hufflepuff"] h3 {
+  color: #383838;
+}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>

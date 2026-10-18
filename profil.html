@@ -209,6 +209,17 @@ body[data-house="Slytherin"] .card h2 {
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+  
+<script>
+const SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
+const SUPABASE_KEY = "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk";
+
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+</script>
+
 <body>
   <header>
     <h1>👤 Mon profil</h1>

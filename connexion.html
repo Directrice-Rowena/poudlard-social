@@ -236,6 +236,55 @@ Deviens qui tu as envie d’être.
         "Impossible de contacter le serveur. Réessaie plus tard.";
     }
   });
+  
+  const signupForm = document.getElementById("signup-form");
+
+  signupForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const signupStatus = document.getElementById("signup-status");
+    const username = document.getElementById("signup-username").value.trim();
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
+
+    if (!username) {
+      signupStatus.textContent = "Choisis un nom pour ton personnage.";
+      return;
+    }
+
+    signupStatus.textContent = "Création de ton compte en cours…";
+
+    try {
+      const { data, error } = await client.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { username },
+          emailRedirectTo: "https://directrice-rowena.github.io/poudlard-social/"
+        }
+      });
+
+      if (error) {
+        signupStatus.textContent =
+          "Impossible de créer le compte : " + error.message;
+        return;
+      }
+
+      if (data.session && data.user) {
+        signupStatus.textContent =
+          "Compte créé ! Bienvenue à Poudlard. ✨";
+        window.location.href =
+          "https://directrice-rowena.github.io/poudlard-social/accueil.html";
+      } else {
+        signupStatus.textContent =
+          "Compte créé ! Consulte ta boîte e-mail pour confirmer ton adresse avant de te connecter.";
+      }
+    } catch (error) {
+      signupStatus.textContent =
+        "Impossible de contacter le serveur. Réessaie plus tard.";
+    }
+  });
+
 </script>
 
 </body>

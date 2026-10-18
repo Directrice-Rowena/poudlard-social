@@ -186,13 +186,14 @@
   flex-shrink: 0;
 }
 
-/* ✨ Formulaire de publication : thème nuit */
+
+/* Couleurs du formulaire de publication */
 #nouvelle-publication {
   width: 100%;
   box-sizing: border-box;
-  background: #101b2b;
-  color: #f1f4f9;
-  border: 1px solid #426653;
+  background: #0d1825;
+  color: #d4af37;
+  border: 1px solid #0d1825;
   border-radius: 12px;
   padding: 14px;
   font-family: inherit;
@@ -202,12 +203,12 @@
 }
 
 #nouvelle-publication::placeholder {
-  color: #aab7c8;
+  color: #d4af37;
+  opacity: 1;
 }
 
 #nouvelle-publication:focus {
-  border-color: #52b788;
-  box-shadow: 0 0 0 2px #52b78833;
+  border-color: #d4af37;
 }
 
 .publication-creation-actions {
@@ -219,9 +220,9 @@
 
 .publication-creation-actions label {
   display: inline-block;
-  background: #172b29;
-  color: #d5f3e3;
-  border: 1px solid #426653;
+  background: #0d1825;
+  color: #d4af37;
+  border: 1px solid #0d1825;
   border-radius: 10px;
   padding: 10px 12px;
   cursor: pointer;
@@ -229,16 +230,17 @@
 
 .publication-creation-actions input[type="file"] {
   max-width: 100%;
-  color: #c5cfdd;
-  background: #101b2b;
+  color: #d4af37;
+  background: #0d1825;
+  border: 1px solid #0d1825;
   border-radius: 8px;
   padding: 6px;
 }
 
 #bouton-publier {
-  background: #246b4a;
-  color: white;
-  border: 1px solid #52b788;
+  background: #0d1825;
+  color: #d4af37;
+  border: 1px solid #0d1825;
   border-radius: 10px;
   padding: 11px 20px;
   font-weight: bold;
@@ -246,16 +248,17 @@
 }
 
 #bouton-publier:hover {
-  background: #2d8059;
+  color: #f0d879;
 }
 
-/* Le formulaire s'intègre à la page */
+/* Fond du formulaire identique au fond principal */
 main > section.card > .card {
   background: #0d1825;
-  border: 1px solid #294b3b;
+  border: 1px solid #0d1825;
   border-radius: 16px;
   padding: 18px;
 }
+
 
   </style>
 </head>

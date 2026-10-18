@@ -186,6 +186,77 @@
   flex-shrink: 0;
 }
 
+/* ✨ Formulaire de publication : thème nuit */
+#nouvelle-publication {
+  width: 100%;
+  box-sizing: border-box;
+  background: #101b2b;
+  color: #f1f4f9;
+  border: 1px solid #426653;
+  border-radius: 12px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 15px;
+  resize: vertical;
+  outline: none;
+}
+
+#nouvelle-publication::placeholder {
+  color: #aab7c8;
+}
+
+#nouvelle-publication:focus {
+  border-color: #52b788;
+  box-shadow: 0 0 0 2px #52b78833;
+}
+
+.publication-creation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.publication-creation-actions label {
+  display: inline-block;
+  background: #172b29;
+  color: #d5f3e3;
+  border: 1px solid #426653;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.publication-creation-actions input[type="file"] {
+  max-width: 100%;
+  color: #c5cfdd;
+  background: #101b2b;
+  border-radius: 8px;
+  padding: 6px;
+}
+
+#bouton-publier {
+  background: #246b4a;
+  color: white;
+  border: 1px solid #52b788;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#bouton-publier:hover {
+  background: #2d8059;
+}
+
+/* Le formulaire s'intègre à la page */
+main > section.card > .card {
+  background: #0d1825;
+  border: 1px solid #294b3b;
+  border-radius: 16px;
+  padding: 18px;
+}
+
   </style>
 </head>
 <body>

@@ -286,22 +286,6 @@ if (error) {
 }
 
 
-  if (
-    message.includes("profiles_username_unique_ci") ||
-    message.includes("duplicate key") ||
-    message.includes("unique constraint")
-  ) {
-    signupStatus.textContent =
-      "Ce nom de personnage est déjà pris. Choisis-en un autre ! 🪄";
-  } else {
-    signupStatus.textContent =
-      "Impossible de créer le compte : " + error.message;
-  }
-
-  return;
-}
-
-
       if (data.session && data.user) {
         signupStatus.textContent =
           "Compte créé ! Bienvenue à Poudlard. ✨";

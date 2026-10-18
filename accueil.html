@@ -153,6 +153,19 @@
   font-size: 14px;
 }
 
+/* Alignement du nom et du cœur */
+.publication-nom {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.publication-nom .coeur-maison {
+  margin-left: 0;
+  font-size: 17px;
+  line-height: 1;
+}
+
   </style>
 </head>
 <body>
@@ -209,10 +222,15 @@
   <article class="publication">
     <div class="publication-entete">
       <div class="publication-photo">🐍</div>
+  
       <div class="publication-identite">
-        <strong>Lucie Blackhood</strong>
+        <div class="publication-nom">
+          <strong>Lucie Blackhood</strong>
+          <span class="coeur-maison serpentard" title="Serpentard">♥</span>
+        </div>
         <span>Serpentard · À l’instant</span>
       </div>
+
      
     </div>
 <span class="coeur-maison serpentard" title="Serpentard">♥</span>

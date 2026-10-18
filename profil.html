@@ -244,30 +244,35 @@ const client = window.supabase.createClient(
      <p id="house-display">🏰 Ma maison : à renseigner</p>
     </section>
 
-    <section class="card">
-      <h2>✨ Personnaliser mon profil</h2>
+  
+<section class="card">
+  <h2>✨ Personnaliser mon profil</h2>
 
-      <label for="username">Mon nom de sorcier ou de sorcière</label>
-      <input id="username" type="text" maxlength="40"
-        placeholder="Ex. : Lucie Blackhood">
+  <label for="username">Mon nom de sorcier ou de sorcière</label>
+  <input id="username" type="text" maxlength="40"
+    placeholder="Ex. : Lucie Blackhood" required>
 
-      <label for="house">Ma maison</label>
-      <input id="house" type="text"
-        placeholder="Ex. : Serpentard">
+  <label for="house">Ma maison</label>
+  <select id="house" required>
+    <option value="">Choisir ma maison</option>
+    <option value="Gryffondor">🦁 Gryffondor</option>
+    <option value="Serpentard">🐍 Serpentard</option>
+    <option value="Serdaigle">🦅 Serdaigle</option>
+    <option value="Poufsouffle">🦡 Poufsouffle</option>
+  </select>
 
-      <label for="bio">Ma biographie</label>
-      <textarea id="bio" maxlength="500" rows="5"
-        placeholder="Mes passions, mes matières préférées, mes aventures..."></textarea>
+  <label for="bio">Ma biographie</label>
+  <textarea id="bio" maxlength="500" rows="5"
+    placeholder="Mes passions, mes matières préférées, mes aventures..."></textarea>
 
-      <p class="muted">
-        Cette page est pour l'instant une maquette visuelle.
-        L'enregistrement du profil et l'envoi d'une vraie photo seront ajoutés ensuite.
-      </p>
+  <p id="profile-message" class="muted" role="status">
+    Tes changements pourront être enregistrés dans ton profil.
+  </p>
 
-      <button type="button" onclick="alert('La personnalisation sera activée dans une prochaine étape !')">
-        💾 Enregistrer mon profil
-      </button>
-    </section>
+  <button type="button" id="save-profile">
+    💾 Enregistrer mon profil
+  </button>
+</section>
 
     <section class="card">
       <h2>🌟 Mes souvenirs</h2>
@@ -297,6 +302,84 @@ const client = window.supabase.createClient(
     houseInput.addEventListener("input", updateHouseColors);
     updateHouseColors();
   }
+</script>
+
+<script>
+async function loadProfile() {
+  const message = document.getElementById("profile-message");
+  const { data: { user }, error: authError } =
+    await client.auth.getUser();
+
+  if (authError || !user) {
+    message.textContent =
+      "Connecte-toi pour personnaliser ton profil.";
+    return;
+  }
+
+  const { data, error } = await client
+    .from("profiles")
+    .select("username, house, bio")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    message.textContent =
+      "Impossible de charger ton profil : " + error.message;
+    return;
+  }
+
+  if (data) {
+    document.getElementById("username").value =
+      data.username || "";
+    document.getElementById("house").value =
+      data.house || "";
+    document.getElementById("bio").value =
+      data.bio || "";
+  }
+}
+
+document.getElementById("save-profile").addEventListener(
+  "click",
+  async function () {
+    const message = document.getElementById("profile-message");
+    const username =
+      document.getElementById("username").value.trim();
+    const house = document.getElementById("house").value;
+    const bio = document.getElementById("bio").value.trim();
+
+    if (!username || !house) {
+      message.textContent =
+        "Indique ton nom et choisis ta maison avant d'enregistrer.";
+      return;
+    }
+
+    message.textContent = "Enregistrement en cours...";
+
+    const { data: { user }, error: authError } =
+      await client.auth.getUser();
+
+    if (authError || !user) {
+      message.textContent =
+        "Tu dois te connecter avant d'enregistrer ton profil.";
+      return;
+    }
+
+    const { error } = await client
+      .from("profiles")
+      .update({ username, house, bio })
+      .eq("user_id", user.id);
+
+    if (error) {
+      message.textContent =
+        "Erreur d'enregistrement : " + error.message;
+      return;
+    }
+
+    message.textContent = "✨ Ton profil a été enregistré !";
+  }
+);
+
+loadProfile();
 </script>
 
 

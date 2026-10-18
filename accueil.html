@@ -239,6 +239,38 @@
     Les nouvelles de toute la communauté de Poudlard.
   </p>
 
+  <div class="card">
+    <h3>✍️ Créer une publication</h3>
+    <textarea
+      id="nouvelle-publication"
+      placeholder="Que se passe-t-il dans les couloirs de Poudlard ?"
+      rows="3"
+    ></textarea>
+
+    <div class="publication-creation-actions">
+      <label for="photo-publication">📸 Ajouter une photo</label>
+      <input
+        id="photo-publication"
+        type="file"
+        accept="image/*"
+      />
+
+      <label for="video-publication">🎬 Ajouter une vidéo</label>
+      <input
+        id="video-publication"
+        type="file"
+        accept="video/*"
+      />
+    </div>
+
+    <button type="button" id="bouton-publier">
+      ✨ Publier
+    </button>
+    <p class="muted">
+      La publication sera connectée à Supabase dans une prochaine étape.
+    </p>
+  </div>
+
   <article class="publication">
     <div class="publication-entete">
       <div class="publication-photo">🐍</div>

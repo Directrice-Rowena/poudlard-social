@@ -363,7 +363,30 @@ body[data-house="Hufflepuff"] h2,
 body[data-house="Hufflepuff"] h3 {
   color: #383838;
 }
+/* Ajustements finaux */
 
+/* Serpentard : encadrements plus foncés */
+body[data-house="Serpentard"] input,
+body[data-house="Serpentard"] textarea,
+body[data-house="Slytherin"] input,
+body[data-house="Slytherin"] textarea {
+  border-color: #4b5560;
+}
+
+/* Poufsouffle : écritures plus foncées */
+body[data-house="Poufsouffle"],
+body[data-house="Hufflepuff"] {
+  color: #202020;
+}
+
+body[data-house="Poufsouffle"] label,
+body[data-house="Poufsouffle"] .muted,
+body[data-house="Poufsouffle"] nav a,
+body[data-house="Hufflepuff"] label,
+body[data-house="Hufflepuff"] .muted,
+body[data-house="Hufflepuff"] nav a {
+  color: #202020;
+}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>

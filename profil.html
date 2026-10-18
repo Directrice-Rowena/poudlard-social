@@ -297,10 +297,10 @@ const client = window.supabase.createClient(
         : "🏰 Ma maison : à renseigner";
     }
   }
-
   if (houseInput) {
-    houseInput.addEventListener("input", updateHouseColors);
-    updateHouseColors();
+    houseInput.addEventListener("change", updateHouseColors);
+  }
+ 
   }
 </script>
 
@@ -333,6 +333,13 @@ async function loadProfile() {
       data.username || "";
     document.getElementById("house").value =
       data.house || "";
+    document.body.dataset.house = data.house || "";
+    const houseDisplay = document.getElementById("house-display");
+if (houseDisplay) {
+  houseDisplay.textContent = data.house
+    ? "🏰 Ma maison : " + data.house
+    : "🏰 Ma maison : à renseigner";
+}
     document.getElementById("bio").value =
       data.bio || "";
   }

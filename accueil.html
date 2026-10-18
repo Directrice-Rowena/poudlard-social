@@ -213,9 +213,9 @@
         <strong>Lucie Blackhood</strong>
         <span>Serpentard · À l’instant</span>
       </div>
-      <span class="coeur-maison serpentard" title="Serpentard">♥</span>
+     
     </div>
-
+<span class="coeur-maison serpentard" title="Serpentard">♥</span>
     <p class="publication-texte">
       Bienvenue à Poudlard ! 💚
       Hâte de découvrir vos nouvelles dans le château.
@@ -229,6 +229,17 @@
 </section>
 
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk";
+
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+</script>
 </body>
 </html>
 

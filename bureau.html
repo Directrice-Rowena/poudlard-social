@@ -1,6 +1,9 @@
 ```html
 <!DOCTYPE html>
 <html lang="fr">
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,6 +123,37 @@
       </section>
     </div>
   </main>
+  
+<script>
+const BUREAU_SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
+const BUREAU_SUPABASE_KEY = "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk";
+
+const bureauClient = window.supabase.createClient(
+  BUREAU_SUPABASE_URL,
+  BUREAU_SUPABASE_KEY
+);
+
+(async function verifierAccesDirectrice() {
+  const { data: sessionData, error: sessionError } =
+    await bureauClient.auth.getSession();
+
+  if (sessionError || !sessionData.session) {
+    window.location.replace("connexion.html");
+    return;
+  }
+
+  const { data: estAdmin, error: adminError } =
+    await bureauClient.rpc("is_admin");
+
+  if (adminError || estAdmin !== true) {
+    window.location.replace("accueil.html");
+    return;
+  }
+
+  document.body.style.visibility = "visible";
+})();
+</script>
+
 </body>
 </html>
 ```

@@ -122,7 +122,40 @@
       <p>De futurs événements pourront être ajoutés à ce calendrier.</p>
       <p class="muted">Cette page est une maquette : les inscriptions et les événements dynamiques viendront plus tard.</p>
     </section>
+
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const evenementsClient = window.supabase.createClient(
+      "https://znzwzozhukugrjnznlng.supabase.co",
+      "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk"
+    );
+
+    async function chargerFondEvenements() {
+      const { data, error } = await evenementsClient
+        .from("chateau_decorations")
+        .select("fonds")
+        .eq("id", 1)
+        .single();
+
+      if (error || !data || !data.fonds || !data.fonds.evenements) {
+        console.log("Aucun fond personnalisé pour les événements.");
+        return;
+      }
+
+      const bandeau = document.querySelector("header");
+
+      if (bandeau) {
+        bandeau.style.backgroundImage = `url("${data.fonds.evenements}")`;
+        bandeau.style.backgroundSize = "cover";
+        bandeau.style.backgroundPosition = "center";
+      }
+    }
+
+    chargerFondEvenements();
+  </script>
 </body>
 </html>
+
 ```

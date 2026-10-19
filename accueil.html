@@ -385,15 +385,16 @@ header {
       />
     </div>
 
+
     <button type="button" id="bouton-publier">
       ✨ Publier
     </button>
-    <p class="muted">
-    <p class="muted" id="statut-publication" role="status">
-  Connecte-toi pour publier un message.
-</p>
-  </div>
 
+    <p class="muted" id="statut-publication" role="status">
+      Connecte-toi pour publier un message.
+    </p>
+    <div id="liste-publications"></div>
+  </div>
   <article class="publication">
     <div class="publication-entete">
       <div class="publication-photo">🐍</div>
@@ -469,6 +470,106 @@ header {
  
   
 
+
+async function chargerPublicationsAccueil() {
+  const statut = document.getElementById("statut-publication");
+  const bouton = document.getElementById("bouton-publier");
+
+const liste = document.getElementById("liste-publications");
+
+  const { data: publications, error } = await client
+    .from("posts")
+    .select("id, user_id, content, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    statut.textContent = "Impossible de charger les publications.";
+    return;
+  }
+
+  liste.replaceChildren();
+
+  const ids = [...new Set((publications || []).map(p => p.user_id))];
+  let noms = new Map();
+
+  if (ids.length) {
+    const { data: profils } = await client
+      .from("profiles")
+      .select("user_id, username")
+      .in("user_id", ids);
+
+    noms = new Map((profils || []).map(p => [p.user_id, p.username]));
+  }
+
+  for (const publication of publications || []) {
+    const carte = document.createElement("article");
+    carte.className = "publication";
+
+    const auteur = document.createElement("strong");
+    auteur.textContent =
+      "🧙 " + (noms.get(publication.user_id) || "Élève de Poudlard");
+
+    const contenu = document.createElement("p");
+    contenu.textContent = publication.content;
+
+    const date = document.createElement("small");
+    date.textContent =
+      new Date(publication.created_at).toLocaleString("fr-FR");
+
+    carte.append(auteur, contenu, date);
+    liste.appendChild(carte);
+  }
+
+  if (statut) {
+    statut.textContent = (publications || []).length
+      + " publication(s) chargée(s).";
+  }
+}
+
+document.getElementById("bouton-publier")
+  ?.addEventListener("click", async () => {
+    const champ = document.getElementById("nouvelle-publication");
+    const statut = document.getElementById("statut-publication");
+    const bouton = document.getElementById("bouton-publier");
+    const message = champ.value.trim();
+
+    if (!message) {
+      statut.textContent = "Écris un message avant de publier.";
+      return;
+    }
+
+    bouton.disabled = true;
+    statut.textContent = "Publication en cours...";
+
+    try {
+      const { data: { user }, error: erreurConnexion } =
+        await client.auth.getUser();
+
+      if (erreurConnexion || !user) {
+        statut.textContent = "Connecte-toi pour publier un message.";
+        return;
+      }
+
+      const { error } = await client
+        .from("posts")
+        .insert({ user_id: user.id, content: message });
+
+      if (error) {
+        statut.textContent = "Erreur de publication : " + error.message;
+        return;
+      }
+
+      champ.value = "";
+      statut.textContent = "✨ Ta publication est affichée à Poudlard !";
+      await chargerPublicationsAccueil();
+    } catch (erreur) {
+      statut.textContent = "Une erreur inattendue est survenue.";
+    } finally {
+      bouton.disabled = false;
+    }
+  });
+
+chargerPublicationsAccueil();
  
 
 </script>

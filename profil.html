@@ -41,47 +41,35 @@
       border-radius: 16px;
       background: #192541;
     }
-    .photo {
-      display: grid;
-      width: 110px;
-      height: 110px;
-      margin: 16px auto;
-      place-items: center;
-      border: 3px solid #a58bd4;
-      border-radius: 50%;
-      background: #26395d;
-      font-size: 42px;
-    }
-    .center {
-      text-align: center;
-    }
-    .muted {
-      color: #b9c5df;
-    }
-    label {
-      display: block;
-      margin-top: 16px;
-      margin-bottom: 8px;
-    }
-    input, textarea, button {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #526487;
-      border-radius: 8px;
-      font: inherit;
-    }
-    input, textarea {
-      color: #edf1ff;
-      background: #10182b;
-    }
-    button {
-      margin-top: 16px;
-      color: white;
-      background: #514276;
-      cursor: pointer;
-    }
-    
+  
+.photo {
+  display: grid;
+  width: 110px;
+  height: 110px;
+  margin: 16px auto;
+  place-items: center;
+  border: 3px solid #a58bd4;
+  border-radius: 50%;
+  background: #26395d;
+  font-size: 42px;
+  overflow: hidden;
+  position: relative;
+}
+
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+#photo-placeholder {
+  position: relative;
+  z-index: 1;
+}
+
 /* Couleurs des quatre maisons de Poudlard */
 :root {
   --house-primary: #17243b;

@@ -233,6 +233,24 @@ select {
   font: inherit;
 }
 
+
+
+/* Remettre les champs de personnalisation les uns sous les autres */
+.card:has(#username) label {
+  display: block;
+  margin-top: 12px;
+}
+
+.card:has(#username) input,
+.card:has(#username) select,
+.card:has(#username) textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+
 select:focus,
 input:focus,
 textarea:focus {

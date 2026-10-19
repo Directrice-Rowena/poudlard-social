@@ -120,10 +120,36 @@
         <h2>Les annonces officielles</h2>
         <p>Partager les nouvelles importantes avec tous les élèves.</p>
         <p class="muted">La publication d'annonces sera ajoutée ultérieurement.</p>
-      </section>
+   
+        </section>
+
+<section class="panel">
+  <div class="symbol">🎨</div>
+  <h2>Décorations du château</h2>
+  <p>Choisis les fonds qui habilleront les pages de Poudlard Social.</p>
+
+  <label for="fond-accueil">Fond de l’accueil</label>
+  <input type="file" id="fond-accueil" accept="image/jpeg,image/png,image/webp">
+
+  <label for="fond-profil">Fond des profils</label>
+  <input type="file" id="fond-profil" accept="image/jpeg,image/png,image/webp">
+
+  <label for="fond-evenements">Fond des événements</label>
+  <input type="file" id="fond-evenements" accept="image/jpeg,image/png,image/webp">
+
+  <p id="message-decorations" class="muted" role="status">
+    Sélectionne tes images, puis enregistre les décorations.
+  </p>
+
+  <button type="button" id="enregistrer-decorations">
+    Enregistrer les décorations
+  </button>
+</section>
+
+     
+
     </div>
   </main>
-  
 <script>
 const BUREAU_SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
 const BUREAU_SUPABASE_KEY = "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk";
@@ -149,9 +175,117 @@ const bureauClient = window.supabase.createClient(
     window.location.replace("accueil.html");
     return;
   }
+ 
+
+  // Préparer le panneau des décorations
+  const boutonDecorations = document.getElementById("enregistrer-decorations");
+  const messageDecorations = document.getElementById("message-decorations");
+
+  const champsDecorations = {
+    accueil: document.getElementById("fond-accueil"),
+    profil: document.getElementById("fond-profil"),
+    evenements: document.getElementById("fond-evenements")
+  };
+
+  let fondsActuels = {};
+
+  async function chargerDecorations() {
+    const { data, error } = await bureauClient
+      .from("chateau_decorations")
+      .select("fonds")
+      .eq("id", 1)
+      .single();
+
+    if (error) {
+      messageDecorations.textContent =
+        "Impossible de charger les décorations. Réessaie plus tard.";
+      return false;
+    }
+
+    fondsActuels = data.fonds || {};
+    messageDecorations.textContent =
+      "Décorations chargées. Tu peux choisir de nouvelles images.";
+    return true;
+  }
+
+  boutonDecorations.addEventListener("click", async function () {
+    boutonDecorations.disabled = true;
+    messageDecorations.textContent = "Enregistrement des décorations…";
+
+    try {
+      const nouveauxFonds = { ...fondsActuels };
+
+      for (const [page, champ] of Object.entries(champsDecorations)) {
+        const fichier = champ.files[0];
+
+        // Si aucune nouvelle image n'est choisie, garder l'image actuelle.
+        if (!fichier) continue;
+
+        if (!["image/jpeg", "image/png", "image/webp"].includes(fichier.type)) {
+          throw new Error("Choisis uniquement une image JPG, PNG ou WebP.");
+        }
+
+        if (fichier.size > 2 * 1024 * 1024) {
+          throw new Error("Chaque image doit peser 2 Mo maximum.");
+        }
+
+        const extension = fichier.type === "image/jpeg"
+          ? "jpg"
+          : fichier.type === "image/png" ? "png" : "webp";
+
+        const chemin = `${page}-${Date.now()}.${extension}`;
+
+        const { error: erreurEnvoi } = await bureauClient.storage
+          .from("chateau-fonds")
+          .upload(chemin, fichier, {
+            contentType: fichier.type
+          });
+
+        if (erreurEnvoi) {
+          throw new Error("Une image n'a pas pu être envoyée. Vérifie les autorisations du stockage.");
+        }
+
+        const { data: urlData } = bureauClient.storage
+          .from("chateau-fonds")
+          .getPublicUrl(chemin);
+
+        nouveauxFonds[page] = urlData.publicUrl;
+      }
+
+      const { error: erreurSauvegarde } = await bureauClient
+        .from("chateau_decorations")
+        .update({
+          fonds: nouveauxFonds,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", 1);
+
+      if (erreurSauvegarde) {
+        throw new Error("Les images ont été envoyées, mais les réglages n'ont pas pu être sauvegardés.");
+      }
+
+      fondsActuels = nouveauxFonds;
+
+  for (const champ of Object.values(champsDecorations)) {
+  champ.value = "";
+}
+
+      messageDecorations.textContent =
+        "Décorations enregistrées ! Elles sont sauvegardées pour le site.";
+    } catch (erreur) {
+      messageDecorations.textContent = erreur.message ||
+        "Une erreur est survenue pendant l'enregistrement.";
+    } finally {
+      boutonDecorations.disabled = false;
+    }
+  });
+
+  await chargerDecorations();
+
 
   document.body.style.visibility = "visible";
-})();
+
+ })();
 </script>
 
 </body>

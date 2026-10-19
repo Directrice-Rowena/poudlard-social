@@ -150,6 +150,11 @@
 
   <label for="fond-evenements">Fond des événements</label>
   <input type="file" id="fond-evenements" accept="image/jpeg,image/png,image/webp">
+ <label for="fond-hiboux">Fond des Hiboux 🦉</label>
+<input type="file" id="fond-hiboux" accept="image/jpeg,image/png,image/webp">
+
+<label for="fond-comptes">Fond des comptes 👤</label>
+<input type="file" id="fond-comptes" accept="image/jpeg,image/png,image/webp">
 
   <p id="message-decorations" class="muted" role="status">
     Sélectionne tes images, puis enregistre les décorations.
@@ -195,16 +200,18 @@ const bureauClient = window.supabase.createClient(
   const boutonDecorations = document.getElementById("enregistrer-decorations");
   const messageDecorations = document.getElementById("message-decorations");
 
-  
-const champsDecorations = {
+  const champsDecorations = {
   accueil: document.getElementById("fond-accueil"),
   profil: document.getElementById("fond-profil"),
   serpentard: document.getElementById("fond-serpentard"),
   gryffondor: document.getElementById("fond-gryffondor"),
   serdaigle: document.getElementById("fond-serdaigle"),
   poufsouffle: document.getElementById("fond-poufsouffle"),
-  evenements: document.getElementById("fond-evenements")
+  evenements: document.getElementById("fond-evenements"),
+  hiboux: document.getElementById("fond-hiboux"),
+  comptes: document.getElementById("fond-comptes")
 };
+
 
 
   let fondsActuels = {};

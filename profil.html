@@ -422,6 +422,21 @@ body[data-house="Slytherin"] input,
 body[data-house="Slytherin"] textarea {
   border-color: #11151a;
 } 
+   
+/* Fond commun des profils de toutes les maisons */
+body {
+  background-color: #10182b;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Les cartes restent lisibles sur le fond */
+.card {
+  background-color: rgba(25, 37, 65, 0.92);
+}
+ 
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -434,6 +449,23 @@ const client = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
+ 
+(async function chargerFondProfil() {
+  const { data, error } = await client
+    .from("chateau_decorations")
+    .select("fonds")
+    .eq("id", 1)
+    .single();
+
+  if (error || !data || !data.fonds || !data.fonds.profil) {
+    console.log("Aucun fond de profil disponible pour le moment.");
+    return;
+  }
+
+  document.body.style.backgroundImage =
+    `url("${data.fonds.profil}")`;
+})();
+ 
 </script>
 
 <body>

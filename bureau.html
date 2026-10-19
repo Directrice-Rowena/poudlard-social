@@ -131,7 +131,22 @@
   <input type="file" id="fond-accueil" accept="image/jpeg,image/png,image/webp">
 
   <label for="fond-profil">Fond des profils</label>
-  <input type="file" id="fond-profil" accept="image/jpeg,image/png,image/webp">
+ 
+<label for="fond-profil">Fond de profil par défaut</label>
+<input type="file" id="fond-profil" accept="image/jpeg,image/png,image/webp">
+
+<label for="fond-serpentard">Fond des profils Serpentard 🐍</label>
+<input type="file" id="fond-serpentard" accept="image/jpeg,image/png,image/webp">
+
+<label for="fond-gryffondor">Fond des profils Gryffondor 🦁</label>
+<input type="file" id="fond-gryffondor" accept="image/jpeg,image/png,image/webp">
+
+<label for="fond-serdaigle">Fond des profils Serdaigle 🦅</label>
+<input type="file" id="fond-serdaigle" accept="image/jpeg,image/png,image/webp">
+
+<label for="fond-poufsouffle">Fond des profils Poufsouffle 🦡</label>
+<input type="file" id="fond-poufsouffle" accept="image/jpeg,image/png,image/webp">
+
 
   <label for="fond-evenements">Fond des événements</label>
   <input type="file" id="fond-evenements" accept="image/jpeg,image/png,image/webp">
@@ -180,11 +195,17 @@ const bureauClient = window.supabase.createClient(
   const boutonDecorations = document.getElementById("enregistrer-decorations");
   const messageDecorations = document.getElementById("message-decorations");
 
-  const champsDecorations = {
-    accueil: document.getElementById("fond-accueil"),
-    profil: document.getElementById("fond-profil"),
-    evenements: document.getElementById("fond-evenements")
-  };
+  
+const champsDecorations = {
+  accueil: document.getElementById("fond-accueil"),
+  profil: document.getElementById("fond-profil"),
+  serpentard: document.getElementById("fond-serpentard"),
+  gryffondor: document.getElementById("fond-gryffondor"),
+  serdaigle: document.getElementById("fond-serdaigle"),
+  poufsouffle: document.getElementById("fond-poufsouffle"),
+  evenements: document.getElementById("fond-evenements")
+};
+
 
   let fondsActuels = {};
 

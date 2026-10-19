@@ -296,6 +296,17 @@ header {
 
 
 
+header {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 180px;
+  padding: 35px 20px;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 0 0 18px 18px;
+}
+
   </style>
 </head>
 <body>
@@ -437,8 +448,7 @@ header {
       if (lien) lien.style.display = "inline";
     }
   })();
- 
-  
+
 (async function chargerFondAccueil() {
   const { data, error } = await client
     .from("chateau_decorations")
@@ -451,14 +461,16 @@ header {
     return;
   }
 
-  document.body.style.backgroundImage =
-    `url("${data.fonds.accueil}")`;
+  const bandeau = document.querySelector("header");
 
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundPosition = "center";
-  document.body.style.backgroundRepeat = "no-repeat";
-  document.body.style.backgroundAttachment = "fixed";
+  if (bandeau) {
+    bandeau.style.backgroundImage = `url("${data.fonds.accueil}")`;
+  }
 })();
+ 
+  
+
+ 
 
 </script>
 

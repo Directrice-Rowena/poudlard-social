@@ -456,24 +456,53 @@ const client = window.supabase.createClient(
 );
  
 (async function chargerFondProfil() {
-  const { data, error } = await client
+  const { data: { user } } = await client.auth.getUser();
+
+  if (!user) return;
+
+  const { data: profil } = await client
+    .from("profiles")
+    .select("house")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const { data: decorations, error } = await client
     .from("chateau_decorations")
     .select("fonds")
     .eq("id", 1)
     .single();
 
-  if (error || !data || !data.fonds || !data.fonds.profil) {
-    console.log("Aucun fond de profil disponible pour le moment.");
+  if (error || !decorations || !decorations.fonds) {
+    console.log("Aucun fond de profil disponible.");
     return;
   }
 
- const bandeau = document.querySelector("header");
+  const maison = (profil?.house || "")
+    .trim()
+    .toLowerCase();
 
-if (bandeau) {
-  bandeau.style.backgroundImage =
-    `url("${data.fonds.profil}")`;
-}
+  const cleMaison = {
+    "serpentard": "serpentard",
+    "slytherin": "serpentard",
+    "gryffondor": "gryffondor",
+    "gryffindor": "gryffondor",
+    "serdaigle": "serdaigle",
+    "ravenclaw": "serdaigle",
+    "poufsouffle": "poufsouffle",
+    "hufflepuff": "poufsouffle"
+  }[maison];
+
+  const fonds = decorations.fonds;
+  const image = (cleMaison && fonds[cleMaison]) || fonds.profil;
+
+  const bandeau = document.querySelector("header");
+
+  if (bandeau && image) {
+    bandeau.style.backgroundImage = `url("${image}")`;
+  }
 })();
+
+
  
 </script>
 

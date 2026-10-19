@@ -422,15 +422,20 @@ body[data-house="Slytherin"] input,
 body[data-house="Slytherin"] textarea {
   border-color: #11151a;
 } 
-   
-/* Fond commun des profils de toutes les maisons */
-body {
-  background-color: #10182b;
+
+/* Fond commun derrière le titre du profil */
+header {
+  background-color: #192541;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  min-height: 150px;
+  padding: 35px 16px;
+  box-sizing: border-box;
+  text-align: center;
 }
+   
+
 
 /* Les cartes restent lisibles sur le fond */
 .card {
@@ -462,8 +467,12 @@ const client = window.supabase.createClient(
     return;
   }
 
-  document.body.style.backgroundImage =
+ const bandeau = document.querySelector("header");
+
+if (bandeau) {
+  bandeau.style.backgroundImage =
     `url("${data.fonds.profil}")`;
+}
 })();
  
 </script>

@@ -519,21 +519,26 @@ const identite = document.createElement("div");
 identite.appendChild(auteur);
 entete.append(photo, identite);
 
-    const coeur = document.createElement("span");
-    coeur.textContent = " ♥";
+    const animal = document.createElement("span");
 
-    const maison = (profil?.house || "").toLowerCase();
+const maison = (profil?.house || "").trim().toLowerCase();
 
-    const couleurs = {
-      serpentard: "#2e9b62",
-      gryffondor: "#e74c3c",
-      serdaigle: "#3498db",
-      poufsouffle: "#e6b422"
-    };
+const animaux = {
+  serpentard: { symbole: "🐍", couleur: "#2e9b62" },
+  gryffondor: { symbole: "🦁", couleur: "#e74c3c" },
+  serdaigle: { symbole: "🦅", couleur: "#3498db" },
+  poufsouffle: { symbole: "🦡", couleur: "#e6b422" }
+};
 
-    coeur.style.color = couleurs[maison] || "#999999";
-   identite.appendChild(coeur); 
+const blason = animaux[maison] || { symbole: "✨", couleur: "#999999" };
 
+animal.textContent = blason.symbole;
+animal.style.color = blason.couleur;
+animal.title = profil?.house || "Maison inconnue";
+
+identite.appendChild(animal);
+
+ 
     const contenu = document.createElement("p");
     contenu.textContent = publication.content;
 

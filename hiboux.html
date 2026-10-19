@@ -140,13 +140,50 @@
     </div>
   </main>
 
-  <script>
-    document.getElementById("message-form").addEventListener("submit", function(event) {
-      event.preventDefault();
-      document.getElementById("message-status").textContent =
-        "Ton hibou est prêt en maquette ! L'envoi réel sera activé dans une prochaine étape.";
-    });
-  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  document.getElementById("message-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    document.getElementById("message-status").textContent =
+      "Ton hibou est prêt en maquette ! L'envoi réel sera activé dans une prochaine étape.";
+  });
+</script>
+  
+<script>
+  const SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk";
+
+  const hibouxClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  async function chargerFondHiboux() {
+    const { data, error } = await hibouxClient
+      .from("chateau_decorations")
+      .select("fonds")
+      .eq("id", 1)
+      .single();
+
+    if (error || !data || !data.fonds || !data.fonds.hiboux) {
+      console.log("Aucun fond personnalisé pour les Hiboux.");
+      return;
+    }
+
+    const bandeau = document.querySelector("header");
+
+    if (bandeau) {
+      bandeau.style.backgroundImage = `url("${data.fonds.hiboux}")`;
+      bandeau.style.backgroundSize = "cover";
+      bandeau.style.backgroundPosition = "center";
+    }
+  }
+
+  chargerFondHiboux();
+</script>
+
 </body>
 </html>
 ```

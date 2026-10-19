@@ -42,20 +42,21 @@
       background: #192541;
     }
   
+
+
+
 .photo {
-  display: grid;
+  display: block;
   width: 110px;
   height: 110px;
   margin: 16px auto;
-  place-items: center;
-  border: 3px solid #a58bd4;
+  border: 3px solid var(--house-secondary, #a58bd4);
   border-radius: 50%;
   background: #26395d;
-  font-size: 42px;
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 }
-
 
 .photo img {
   position: absolute;
@@ -69,11 +70,14 @@
   z-index: 2;
 }
 
-
 #photo-placeholder {
+  display: block;
   position: relative;
   z-index: 1;
+  text-align: center;
+  line-height: 110px;
 }
+
 
 /* Couleurs des quatre maisons de Poudlard */
 :root {

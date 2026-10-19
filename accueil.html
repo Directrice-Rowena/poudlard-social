@@ -470,7 +470,7 @@ const liste = document.getElementById("liste-publications");
   if (ids.length) {
     const { data: profils, error: erreurProfils } = await client
       .from("profiles")
-      .select("user_id, username, house")
+     .select("user_id, username, house, avatar_url")
       .in("user_id", ids);
 
     if (erreurProfils) {
@@ -488,10 +488,36 @@ const liste = document.getElementById("liste-publications");
     const carte = document.createElement("article");
     carte.className = "publication";
 
-    const profil = profilsParUtilisateur.get(publication.user_id);
-    const auteur = document.createElement("strong");
-    auteur.textContent =
-      "🧙 " + (profil?.username || "Élève de Poudlard");
+   const profil = profilsParUtilisateur.get(publication.user_id);
+
+const entete = document.createElement("div");
+entete.className = "publication-entete";
+entete.style.display = "flex";
+entete.style.alignItems = "center";
+entete.style.gap = "10px";
+entete.style.marginBottom = "10px";
+
+const photo = document.createElement("img");
+photo.className = "publication-photo";
+photo.alt = "Photo de " + (profil?.username || "l’élève");
+photo.style.width = "48px";
+photo.style.height = "48px";
+photo.style.borderRadius = "50%";
+photo.style.objectFit = "cover";
+photo.style.flexShrink = "0";
+
+if (profil?.avatar_url) {
+  photo.src = profil.avatar_url;
+} else {
+  photo.style.display = "none";
+}
+
+const auteur = document.createElement("strong");
+auteur.textContent = profil?.username || "Élève de Poudlard";
+
+const identite = document.createElement("div");
+identite.appendChild(auteur);
+entete.append(photo, identite);
 
     const coeur = document.createElement("span");
     coeur.textContent = " ♥";
@@ -506,6 +532,7 @@ const liste = document.getElementById("liste-publications");
     };
 
     coeur.style.color = couleurs[maison] || "#999999";
+   identite.appendChild(coeur); 
 
     const contenu = document.createElement("p");
     contenu.textContent = publication.content;
@@ -514,7 +541,7 @@ const liste = document.getElementById("liste-publications");
     date.textContent =
       new Date(publication.created_at).toLocaleString("fr-FR");
 
-    carte.append(auteur, coeur, contenu, date);  
+   carte.append(entete, contenu, date);
     liste.appendChild(carte);
   }
 

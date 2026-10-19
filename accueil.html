@@ -437,20 +437,29 @@ header {
       if (lien) lien.style.display = "inline";
     }
   })();
-  (async function afficherLienDirectrice() {
-  const { data: sessionData, error: sessionError } =
-    await client.auth.getSession();
+ 
+  
+(async function chargerFondAccueil() {
+  const { data, error } = await client
+    .from("chateau_decorations")
+    .select("fonds")
+    .eq("id", 1)
+    .single();
 
-  if (sessionError || !sessionData.session) return;
-
-  const { data: estAdmin, error: adminError } =
-    await client.rpc("is_admin");
-
-  if (!adminError && estAdmin === true) {
-    const lien = document.getElementById("lien-bureau");
-    if (lien) lien.style.display = "inline";
+  if (error || !data || !data.fonds || !data.fonds.accueil) {
+    console.log("Aucun fond d'accueil disponible pour le moment.");
+    return;
   }
+
+  document.body.style.backgroundImage =
+    `url("${data.fonds.accueil}")`;
+
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundAttachment = "fixed";
 })();
+
 </script>
 
 </body>

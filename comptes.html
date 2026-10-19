@@ -160,6 +160,42 @@
         : "";
     });
   </script>
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const comptesURL = "https://znzwzozhukugrjnznlng.supabase.co";
+  const comptesCle = "sb_publishable_KfRIEetutslWHvhP4JQOfA_MiByrzMk";
+
+  const comptesClient = window.supabase.createClient(
+    comptesURL,
+    comptesCle
+  );
+
+  async function chargerFondComptes() {
+    const { data, error } = await comptesClient
+      .from("chateau_decorations")
+      .select("fonds")
+      .eq("id", 1)
+      .single();
+
+    if (error || !data || !data.fonds || !data.fonds.comptes) {
+      console.log("Aucun fond personnalisé pour les Comptes.");
+      return;
+    }
+
+    const bandeau = document.querySelector("header");
+
+    if (bandeau) {
+      bandeau.style.backgroundImage = `url("${data.fonds.comptes}")`;
+      bandeau.style.backgroundSize = "cover";
+      bandeau.style.backgroundPosition = "center";
+    }
+  }
+
+  chargerFondComptes();
+</script>
+
 </body>
 </html>
 ```

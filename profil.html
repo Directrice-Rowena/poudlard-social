@@ -56,14 +56,19 @@
   position: relative;
 }
 
+
 .photo img {
   position: absolute;
   inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  clip-path: circle(50%);
+  z-index: 2;
 }
+
 
 #photo-placeholder {
   position: relative;
@@ -525,15 +530,19 @@ const client = window.supabase.createClient(
   <main>
     <section class="card center">
 
-<div class="photo" id="profile-photo-container">
-  <img
-    id="profile-photo"
-    src=""
-    alt="Ma photo de profil"
-    style="display: none;"
-  >
-  <span id="photo-placeholder">📷</span>
-</div>
+
+.photo img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  clip-path: circle(50%);
+  z-index: 2;
+}
+
 
 <label for="photo-upload">Choisir ma photo de profil</label>
 <input

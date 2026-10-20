@@ -551,7 +551,8 @@ date.textContent =
 
 carte.append(entete, contenu, date);
 
-// Zone des J’aime
+
+ // Zone des J’aime
 const zoneSociale = document.createElement("div");
 zoneSociale.style.marginTop = "12px";
 
@@ -572,14 +573,18 @@ if (erreurAimes) {
   boutonAimer.disabled = true;
   compteurAimes.textContent = "Impossible de charger les J’aime";
 } else {
-  const aAime = (jAimes || []).some(
+  let aAime = (jAimes || []).some(
     j => j.user_id === utilisateur?.id
   );
 
-  boutonAimer.textContent = aAime ? "❤️ J’aimé" : "🤍 J’aime";
- compteurAimes.textContent =
-  (jAimes || []).length +
-  " J’aime";
+  let nombreAimes = (jAimes || []).length;
+
+  const actualiserBoutonAime = () => {
+    boutonAimer.textContent = aAime ? "❤️ J’aimé" : "🤍 J’aime";
+    compteurAimes.textContent = nombreAimes + " J’aime";
+  };
+
+  actualiserBoutonAime();
 
   boutonAimer.addEventListener("click", async () => {
     if (!utilisateur) {
@@ -601,6 +606,9 @@ if (erreurAimes) {
         boutonAimer.disabled = false;
         return;
       }
+
+      aAime = false;
+      nombreAimes = Math.max(0, nombreAimes - 1);
     } else {
       const { error } = await client
         .from("post_likes")
@@ -614,9 +622,13 @@ if (erreurAimes) {
         boutonAimer.disabled = false;
         return;
       }
+
+      aAime = true;
+      nombreAimes += 1;
     }
 
-    await chargerPublicationsAccueil();
+    actualiserBoutonAime();
+    boutonAimer.disabled = false;
   });
 }
 

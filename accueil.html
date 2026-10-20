@@ -623,9 +623,27 @@ if (erreurAimes) {
 zoneSociale.append(boutonAimer, compteurAimes);
 
 // Zone des commentaires
-const titreCommentaires = document.createElement("h4");
-titreCommentaires.textContent = "💬 Commentaires";
-titreCommentaires.style.marginTop = "16px";
+
+
+const boutonCommentaires = document.createElement("button");
+boutonCommentaires.type = "button";
+boutonCommentaires.textContent = "▸ 💬 Commentaires";
+boutonCommentaires.style.marginTop = "16px";
+boutonCommentaires.style.display = "block";
+boutonCommentaires.style.width = "100%";
+boutonCommentaires.style.textAlign = "left";
+boutonCommentaires.style.cursor = "pointer";
+
+const zoneCommentaires = document.createElement("div");
+zoneCommentaires.style.display = "none";
+
+boutonCommentaires.addEventListener("click", () => {
+  const ouvert = zoneCommentaires.style.display === "none";
+  zoneCommentaires.style.display = ouvert ? "block" : "none";
+  boutonCommentaires.textContent = ouvert
+    ? "▾ 💬 Commentaires"
+    : "▸ 💬 Commentaires";
+});
 
 const listeCommentaires = document.createElement("div");
 
@@ -716,12 +734,18 @@ formulaireCommentaire.addEventListener("submit", async evenement => {
   await chargerPublicationsAccueil();
 });
 
-carte.append(
-  zoneSociale,
-  titreCommentaires,
+
+zoneCommentaires.append(
   listeCommentaires,
   formulaireCommentaire
 );
+
+carte.append(
+  zoneSociale,
+  boutonCommentaires,
+  zoneCommentaires
+);
+
 
 liste.appendChild(carte);
 

@@ -736,9 +736,40 @@ formulaireCommentaire.addEventListener("submit", async evenement => {
     return;
   }
 
-  await chargerPublicationsAccueil();
-});
+  const nouvelleLigne = document.createElement("p");
+  const nomFort = document.createElement("strong");
+  nomFort.textContent =
+    (profilsParUtilisateur.get(utilisateur.id)?.username || "Élève de Poudlard") + " : ";
 
+  const texte = document.createElement("span");
+  texte.textContent = message;
+
+  nouvelleLigne.append(nomFort, texte);
+
+  const petiteDate = document.createElement("small");
+  petiteDate.textContent =
+    " · " + new Date().toLocaleString("fr-FR");
+  nouvelleLigne.appendChild(petiteDate);
+
+  if (listeCommentaires.textContent === "Pas encore de commentaire.") {
+    listeCommentaires.textContent = "";
+  }
+
+  listeCommentaires.appendChild(nouvelleLigne);
+
+  const nombreActuel =
+    Number(compteurCommentaires.textContent.replace(/[()]/g, "")) || 0;
+
+  compteurCommentaires.textContent = "(" + (nombreActuel + 1) + ")";
+
+  boutonCommentaires.textContent =
+    (zoneCommentaires.style.display === "none"
+      ? "▸ 💬 Commentaires "
+      : "▾ 💬 Commentaires ") + compteurCommentaires.textContent;
+
+  champCommentaire.value = "";
+  boutonCommenter.disabled = false;
+});
 
 zoneCommentaires.append(
   listeCommentaires,

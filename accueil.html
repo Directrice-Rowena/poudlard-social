@@ -488,7 +488,8 @@ const liste = document.getElementById("liste-publications");
     const carte = document.createElement("article");
     carte.className = "publication";
 
-   const profil = profilsParUtilisateur.get(publication.user_id);
+ 
+const profil = profilsParUtilisateur.get(publication.user_id);
 
 const entete = document.createElement("div");
 entete.className = "publication-entete";
@@ -519,7 +520,7 @@ const identite = document.createElement("div");
 identite.appendChild(auteur);
 entete.append(photo, identite);
 
-    const animal = document.createElement("span");
+const animal = document.createElement("span");
 
 const maison = (profil?.house || "").trim().toLowerCase();
 
@@ -530,24 +531,200 @@ const animaux = {
   poufsouffle: { symbole: "🦡", couleur: "#e6b422" }
 };
 
-const blason = animaux[maison] || { symbole: "✨", couleur: "#999999" };
+const blason = animaux[maison] || {
+  symbole: "✨",
+  couleur: "#999999"
+};
 
 animal.textContent = blason.symbole;
 animal.style.color = blason.couleur;
 animal.title = profil?.house || "Maison inconnue";
-
+animal.style.marginLeft = "6px";
 identite.appendChild(animal);
 
- 
-    const contenu = document.createElement("p");
-    contenu.textContent = publication.content;
+const contenu = document.createElement("p");
+contenu.textContent = publication.content;
 
-    const date = document.createElement("small");
-    date.textContent =
-      new Date(publication.created_at).toLocaleString("fr-FR");
+const date = document.createElement("small");
+date.textContent =
+  new Date(publication.created_at).toLocaleString("fr-FR");
 
-   carte.append(entete, contenu, date);
-    liste.appendChild(carte);
+carte.append(entete, contenu, date);
+
+// Zone des J’aime
+const zoneSociale = document.createElement("div");
+zoneSociale.style.marginTop = "12px";
+
+const boutonAimer = document.createElement("button");
+const compteurAimes = document.createElement("span");
+compteurAimes.style.marginLeft = "8px";
+
+const { data: { user: utilisateur } } =
+  await client.auth.getUser();
+
+const { data: jAimes, error: erreurAimes } = await client
+  .from("post_likes")
+  .select("id, user_id")
+  .eq("post_id", publication.id);
+
+if (erreurAimes) {
+  boutonAimer.textContent = "❤️ J’aime";
+  boutonAimer.disabled = true;
+  compteurAimes.textContent = "Impossible de charger les J’aime";
+} else {
+  const aAime = (jAimes || []).some(
+    j => j.user_id === utilisateur?.id
+  );
+
+  boutonAimer.textContent = aAime ? "❤️ J’aimé" : "🤍 J’aime";
+ compteurAimes.textContent =
+  (jAimes || []).length +
+  " J’aime";
+
+  boutonAimer.addEventListener("click", async () => {
+    if (!utilisateur) {
+      alert("Connecte-toi pour aimer une publication.");
+      return;
+    }
+
+    boutonAimer.disabled = true;
+
+    if (aAime) {
+      const { error } = await client
+        .from("post_likes")
+        .delete()
+        .eq("post_id", publication.id)
+        .eq("user_id", utilisateur.id);
+
+      if (error) {
+        alert("Impossible de retirer ton J’aime.");
+        boutonAimer.disabled = false;
+        return;
+      }
+    } else {
+      const { error } = await client
+        .from("post_likes")
+        .insert({
+          post_id: publication.id,
+          user_id: utilisateur.id
+        });
+
+      if (error) {
+        alert("Impossible d’ajouter ton J’aime.");
+        boutonAimer.disabled = false;
+        return;
+      }
+    }
+
+    await chargerPublicationsAccueil();
+  });
+}
+
+zoneSociale.append(boutonAimer, compteurAimes);
+
+// Zone des commentaires
+const titreCommentaires = document.createElement("h4");
+titreCommentaires.textContent = "💬 Commentaires";
+titreCommentaires.style.marginTop = "16px";
+
+const listeCommentaires = document.createElement("div");
+
+const { data: commentaires, error: erreurCommentaires } =
+  await client
+    .from("post_comments")
+    .select("id, user_id, content, created_at")
+    .eq("post_id", publication.id)
+    .order("created_at", { ascending: true });
+
+if (erreurCommentaires) {
+  listeCommentaires.textContent =
+    "Impossible de charger les commentaires.";
+} else if (!commentaires || commentaires.length === 0) {
+  listeCommentaires.textContent = "Pas encore de commentaire.";
+} else {
+  commentaires.forEach(commentaire => {
+    const ligne = document.createElement("p");
+    const profilCommentaire =
+      profilsParUtilisateur.get(commentaire.user_id);
+
+    const nom = profilCommentaire?.username || "Élève de Poudlard";
+    const texte = document.createElement("span");
+
+    const nomFort = document.createElement("strong");
+    nomFort.textContent = nom + " : ";
+
+    texte.textContent = commentaire.content;
+
+    ligne.append(nomFort, texte);
+
+    const petiteDate = document.createElement("small");
+    petiteDate.textContent =
+      " · " + new Date(commentaire.created_at).toLocaleString("fr-FR");
+
+    ligne.appendChild(petiteDate);
+    listeCommentaires.appendChild(ligne);
+  });
+}
+
+const formulaireCommentaire = document.createElement("form");
+formulaireCommentaire.style.display = "flex";
+formulaireCommentaire.style.gap = "8px";
+formulaireCommentaire.style.marginTop = "10px";
+
+const champCommentaire = document.createElement("input");
+champCommentaire.type = "text";
+champCommentaire.placeholder = "Écrire un commentaire...";
+champCommentaire.maxLength = 1000;
+champCommentaire.required = true;
+champCommentaire.style.flex = "1";
+champCommentaire.style.minWidth = "0";
+
+const boutonCommenter = document.createElement("button");
+boutonCommenter.type = "submit";
+boutonCommenter.textContent = "Envoyer";
+
+formulaireCommentaire.append(champCommentaire, boutonCommenter);
+
+formulaireCommentaire.addEventListener("submit", async evenement => {
+  evenement.preventDefault();
+
+  if (!utilisateur) {
+    alert("Connecte-toi pour commenter.");
+    return;
+  }
+
+  const message = champCommentaire.value.trim();
+
+  if (!message) return;
+
+  boutonCommenter.disabled = true;
+
+  const { error } = await client
+    .from("post_comments")
+    .insert({
+      post_id: publication.id,
+      user_id: utilisateur.id,
+      content: message
+    });
+
+  if (error) {
+    alert("Impossible de publier le commentaire.");
+    boutonCommenter.disabled = false;
+    return;
+  }
+
+  await chargerPublicationsAccueil();
+});
+
+carte.append(
+  zoneSociale,
+  titreCommentaires,
+  listeCommentaires,
+  formulaireCommentaire
+);
+
+liste.appendChild(carte);
+
   }
 
   if (statut) {

@@ -551,6 +551,41 @@ header {
   margin: 16px 0 0 auto;
 }
 
+/* Couleurs du bouton Modifier le profil selon la maison */
+
+body[data-house="Serpentard"] .edit-profile-button,
+body[data-house="Slytherin"] .edit-profile-button {
+  background: #174c3a;
+  border-color: #c4c8cc;
+  color: #f0f2f5;
+}
+
+body[data-house="Gryffondor"] .edit-profile-button,
+body[data-house="Gryffindor"] .edit-profile-button {
+  background: #7d1825;
+  border-color: #d6ad55;
+  color: #ffffff;
+}
+
+body[data-house="Serdaigle"] .edit-profile-button,
+body[data-house="Ravenclaw"] .edit-profile-button {
+  background: #173c65;
+  border-color: #c4c8cc;
+  color: #ffffff;
+}
+
+body[data-house="Poufsouffle"] .edit-profile-button,
+body[data-house="Hufflepuff"] .edit-profile-button {
+  background: #d5ad32;
+  border-color: #252525;
+  color: #111111;
+}
+
+/* Petit effet au survol */
+.edit-profile-button:hover {
+  filter: brightness(1.12);
+}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>

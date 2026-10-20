@@ -480,6 +480,77 @@ header {
   background-color: rgba(25, 37, 65, 0.92);
 }
  
+/* Fenêtre de modification du profil */
+.profile-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(5, 10, 22, 0.82);
+}
+
+.profile-modal.is-open {
+  display: flex;
+}
+
+.profile-modal-content {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid #C0C7D2;
+  border-radius: 16px;
+  background: #192541;
+  color: #edf1ff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.profile-modal-content label {
+  display: block;
+  margin-top: 14px;
+}
+
+.profile-modal-content input,
+.profile-modal-content textarea,
+.profile-modal-content select {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.profile-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.profile-modal-actions button,
+.edit-profile-button {
+  padding: 10px 14px;
+  border: 1px solid #C0C7D2;
+  border-radius: 9px;
+  background: #17243B;
+  color: #FFFFFF;
+  font: inherit;
+  cursor: pointer;
+}
+
+.edit-profile-button {
+  display: block;
+  margin: 16px 0 0 auto;
+}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -561,6 +632,7 @@ const client = window.supabase.createClient(
 
   <main>
  
+
 <section class="card center">
   <div class="photo" id="profile-photo-container">
     <img
@@ -572,51 +644,68 @@ const client = window.supabase.createClient(
     <span id="photo-placeholder">📷</span>
   </div>
 
-  <label for="photo-upload">Choisir ma photo de profil</label>
-  <input
-    type="file"
-    id="photo-upload"
-    accept="image/jpeg,image/png,image/webp"
-  >
-  <p class="muted">Formats JPG, PNG ou WebP. Taille maximale : 5 Mo.</p>
-
-
-
-      
-      <h2>Mon identité à Poudlard</h2>
-      <p class="muted">Ton profil pourra accueillir ta photo, ta maison et ta biographie.</p>
-     <p id="house-display">🏰 Ma maison : à renseigner</p>
-    </section>
-
-  
-<section class="card">
-  <h2>✨ Personnaliser mon profil</h2>
-
-  <label for="username">Mon nom de sorcier ou de sorcière</label>
-  <input id="username" type="text" maxlength="40"
-    placeholder="Ex. : Lucie Blackhood" required>
-
-  <label for="house">Ma maison</label>
-  <select id="house" required>
-    <option value="">Choisir ma maison</option>
-    <option value="Gryffondor">🦁 Gryffondor</option>
-    <option value="Serpentard">🐍 Serpentard</option>
-    <option value="Serdaigle">🦅 Serdaigle</option>
-    <option value="Poufsouffle">🦡 Poufsouffle</option>
-  </select>
-
-  <label for="bio">Ma biographie</label>
-  <textarea id="bio" maxlength="500" rows="5"
-    placeholder="Mes passions, mes matières préférées, mes aventures..."></textarea>
-
-  <p id="profile-message" class="muted" role="status">
-    Tes changements pourront être enregistrés dans ton profil.
+  <h2 id="display-username">Mon identité à Poudlard</h2>
+  <p id="house-display" class="muted">
+    🏰 Ma maison : à renseigner
+  </p>
+  <p id="display-bio" class="muted">
+    Ta biographie apparaîtra ici.
   </p>
 
-  <button type="button" id="save-profile">
-    💾 Enregistrer mon profil
+  <button type="button" class="edit-profile-button"
+    id="open-profile-modal">
+    ✨ Modifier le profil
   </button>
 </section>
+
+<section class="profile-modal" id="profile-modal"
+  role="dialog" aria-modal="true"
+  aria-labelledby="modal-title">
+  <div class="profile-modal-content card">
+    <h2 id="modal-title">✨ Modifier mon profil</h2>
+
+    <label for="username">
+      Mon nom de sorcier ou de sorcière
+    </label>
+    <input id="username" type="text" maxlength="40"
+      placeholder="Ex. : Lucie Blackhood" required>
+
+    <label for="house">Ma maison</label>
+    <select id="house" required>
+      <option value="">Choisir ma maison</option>
+      <option value="Gryffondor">🦁 Gryffondor</option>
+      <option value="Serpentard">🐍 Serpentard</option>
+      <option value="Serdaigle">🦅 Serdaigle</option>
+      <option value="Poufsouffle">🦡 Poufsouffle</option>
+    </select>
+
+    <label for="bio">Ma biographie</label>
+    <textarea id="bio" maxlength="500" rows="5"
+      placeholder="Mes passions, mes matières préférées, mes aventures..."></textarea>
+
+    <label for="photo-upload">Ma photo de profil</label>
+    <input type="file" id="photo-upload"
+      accept="image/jpeg,image/png,image/webp">
+    <p class="muted">
+      Formats autorisés : JPG, JPEG, PNG et WebP.
+      Taille maximale : 5 Mo.
+    </p>
+
+    <p id="profile-message" class="muted" role="status">
+      Tes changements ne seront enregistrés qu'après validation.
+    </p>
+
+    <div class="profile-modal-actions">
+      <button type="button" id="cancel-profile-modal">
+        Annuler
+      </button>
+      <button type="button" id="save-profile">
+        💾 Enregistrer
+      </button>
+    </div>
+  </div>
+</section>
+
 
     <section class="card">
       <h2>🌟 Mes souvenirs</h2>
@@ -641,23 +730,74 @@ const client = window.supabase.createClient(
         : "🏰 Ma maison : à renseigner";
     }
   }
+
   if (houseInput) {
     houseInput.addEventListener("change", updateHouseColors);
   }
- 
-  
 </script>
 
+
 <script>
- 
+
 const photoUpload = document.getElementById("photo-upload");
 const profilePhoto = document.getElementById("profile-photo");
 const photoPlaceholder = document.getElementById("photo-placeholder");
+const profileModal = document.getElementById("profile-modal");
+const profileMessage = document.getElementById("profile-message");
+
+const houseEmblems = {
+  "Gryffondor": "🦁",
+  "Serpentard": "🐍",
+  "Serdaigle": "🦅",
+  "Poufsouffle": "🦡"
+};
+
+
+function updateProfileDisplay() {
+  const username = document.getElementById("username").value.trim();
+  const house = houseInput.value;
+  const bio = document.getElementById("bio").value.trim();
+
+  document.getElementById("display-username").textContent =
+    (houseEmblems[house] || "✨") + " " +
+    (username || "Mon identité à Poudlard");
+
+  document.getElementById("display-bio").textContent =
+    bio || "Ta biographie apparaîtra ici.";
+
+  updateHouseColors();
+}
+
+function openProfileModal() {
+  profileModal.classList.add("is-open");
+}
+
+function closeProfileModal() {
+  profileModal.classList.remove("is-open");
+}
+
+document.getElementById("open-profile-modal")
+  .addEventListener("click", openProfileModal);
+
+document.getElementById("cancel-profile-modal")
+  .addEventListener("click", closeProfileModal);
+
+profileModal.addEventListener("click", function(event) {
+  if (event.target === profileModal) {
+    closeProfileModal();
+  }
+});
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    closeProfileModal();
+  }
+});
+
 
 if (photoUpload) {
-  photoUpload.addEventListener("change", function () {
+  photoUpload.addEventListener("change", function() {
     const fichier = photoUpload.files[0];
-
     if (!fichier) return;
 
     if (!["image/jpeg", "image/png", "image/webp"].includes(fichier.type)) {
@@ -674,100 +814,81 @@ if (photoUpload) {
 
     profilePhoto.src = URL.createObjectURL(fichier);
     profilePhoto.style.display = "block";
-    profilePhoto.style.width = "100%";
-    profilePhoto.style.height = "100%";
-    profilePhoto.style.objectFit = "cover";
-    profilePhoto.style.borderRadius = "50%";
     photoPlaceholder.style.display = "none";
   });
 }
- 
+
 async function loadProfile() {
-  const message = document.getElementById("profile-message");
   const { data: { user }, error: authError } =
     await client.auth.getUser();
 
   if (authError || !user) {
-    message.textContent =
+    profileMessage.textContent =
       "Connecte-toi pour personnaliser ton profil.";
     return;
   }
 
-   const { data, error } = await client
+  const { data, error } = await client
     .from("profiles")
     .select("username, house, bio, avatar_url")
     .eq("user_id", user.id)
     .maybeSingle();
 
   if (error) {
-    message.textContent =
+    profileMessage.textContent =
       "Impossible de charger ton profil : " + error.message;
     return;
   }
 
   if (data) {
-    document.getElementById("username").value =
-      data.username || "";
-    document.getElementById("house").value =
-      data.house || "";
-    document.body.dataset.house = data.house || "";
-    const houseDisplay = document.getElementById("house-display");
-if (houseDisplay) {
-  houseDisplay.textContent = data.house
-    ? "🏰 Ma maison : " + data.house
-    : "🏰 Ma maison : à renseigner";
-}
-    document.getElementById("bio").value =
-      data.bio || "";
-    
-if (data.avatar_url) {
-  profilePhoto.src = data.avatar_url;
-  profilePhoto.style.display = "block";
-  profilePhoto.style.width = "100%";
-  profilePhoto.style.height = "100%";
-  profilePhoto.style.objectFit = "cover";
-  profilePhoto.style.borderRadius = "50%";
-  photoPlaceholder.style.display = "none";
-}
+    document.getElementById("username").value = data.username || "";
+    houseInput.value = data.house || "";
+    document.getElementById("bio").value = data.bio || "";
 
+    if (data.avatar_url) {
+      profilePhoto.src = data.avatar_url;
+      profilePhoto.style.display = "block";
+      photoPlaceholder.style.display = "none";
+    }
   }
-}
 
+  updateProfileDisplay();
+}
 
 document.getElementById("save-profile").addEventListener(
   "click",
-  async function () {
-    const message = document.getElementById("profile-message");
+  async function() {
     const username = document.getElementById("username").value.trim();
-    const house = document.getElementById("house").value;
+    const house = houseInput.value;
     const bio = document.getElementById("bio").value.trim();
     const fichier = photoUpload.files[0];
 
     if (!username || !house) {
-      message.textContent =
+      profileMessage.textContent =
         "Indique ton nom et choisis ta maison avant d'enregistrer.";
       return;
     }
 
-    if (fichier) {
-      if (!["image/jpeg", "image/png", "image/webp"].includes(fichier.type)) {
-        message.textContent = "Choisis une image JPG, PNG ou WebP.";
-        return;
-      }
-
-      if (fichier.size > 5 * 1024 * 1024) {
-        message.textContent = "Ta photo ne doit pas dépasser 5 Mo.";
-        return;
-      }
+    if (fichier &&
+        !["image/jpeg", "image/png", "image/webp"].includes(fichier.type)) {
+      profileMessage.textContent =
+        "Choisis une image JPG, PNG ou WebP.";
+      return;
     }
 
-    message.textContent = "Enregistrement en cours...";
+    if (fichier && fichier.size > 5 * 1024 * 1024) {
+      profileMessage.textContent =
+        "Ta photo ne doit pas dépasser 5 Mo.";
+      return;
+    }
+
+    profileMessage.textContent = "Enregistrement en cours...";
 
     const { data: { user }, error: authError } =
       await client.auth.getUser();
 
     if (authError || !user) {
-      message.textContent =
+      profileMessage.textContent =
         "Tu dois te connecter avant d'enregistrer ton profil.";
       return;
     }
@@ -791,7 +912,7 @@ document.getElementById("save-profile").addEventListener(
         });
 
       if (uploadError) {
-        message.textContent =
+        profileMessage.textContent =
           "Impossible d'envoyer la photo : " + uploadError.message;
         return;
       }
@@ -803,35 +924,43 @@ document.getElementById("save-profile").addEventListener(
       modifications.avatar_url = urlData.publicUrl;
     }
 
-    const { error } = await client
+
+    const { data: updatedProfiles, error } = await client
       .from("profiles")
-      .update(modifications)
-      .eq("user_id", user.id);
+      .upsert(
+        {
+          user_id: user.id,
+          ...modifications
+        },
+        { onConflict: "user_id" }
+      )
+      .select("user_id");
 
     if (error) {
-      message.textContent =
+      profileMessage.textContent =
         "Erreur d'enregistrement : " + error.message;
       return;
     }
 
-    if (fichier) {
+    if (!updatedProfiles || updatedProfiles.length === 0) {
+      profileMessage.textContent =
+        "Aucun profil n'a été enregistré. Vérifie les autorisations Supabase.";
+      return;
+    }
+
+
+    if (modifications.avatar_url) {
       profilePhoto.src = modifications.avatar_url;
       profilePhoto.style.display = "block";
-      profilePhoto.style.width = "100%";
-      profilePhoto.style.height = "100%";
-      profilePhoto.style.objectFit = "cover";
-      profilePhoto.style.borderRadius = "50%";
       photoPlaceholder.style.display = "none";
     }
 
-    message.textContent = "✨ Ton profil a été enregistré !";
-    document.body.dataset.house = house;
-
-    document.getElementById("house-display").textContent =
-      "🏰 Ma maison : " + house;
+    updateProfileDisplay();
+    profileMessage.textContent = "✨ Ton profil a été enregistré !";
+    photoUpload.value = "";
+    closeProfileModal();
   }
 );
-
 
 loadProfile();
 </script>

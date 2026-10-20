@@ -734,6 +734,14 @@ const boutonCommenter = document.createElement("button");
 boutonCommenter.type = "submit";
 boutonCommenter.textContent = "Envoyer";
 
+boutonCommenter.style.backgroundColor = "#17243B";
+boutonCommenter.style.color = "#FFFFFF";
+boutonCommenter.style.border = "1px solid #C0C7D2";
+boutonCommenter.style.borderRadius = "10px";
+boutonCommenter.style.padding = "8px 14px";
+boutonCommenter.style.cursor = "pointer";
+    
+
 formulaireCommentaire.append(champCommentaire, boutonCommenter);
 
 formulaireCommentaire.addEventListener("submit", async evenement => {

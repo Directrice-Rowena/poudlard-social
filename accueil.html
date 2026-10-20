@@ -557,16 +557,18 @@ const zoneSociale = document.createElement("div");
 zoneSociale.style.marginTop = "12px";
 
 const boutonAimer = document.createElement("button");
-boutonAimer.style.backgroundColor = "#593A78";
+
+boutonAimer.style.backgroundColor = "#17243B";
 boutonAimer.style.color = "#FFFFFF";
-boutonAimer.style.border = "1px solid #B99AD9";
+boutonAimer.style.border = "1px solid #C0C7D2";
+
 boutonAimer.style.borderRadius = "10px";
 boutonAimer.style.padding = "8px 14px";
 boutonAimer.style.cursor = "pointer";
 
 const compteurAimes = document.createElement("span");
 compteurAimes.style.marginLeft = "8px";
-compteurAimes.style.color = "#B99AD9";
+compteurAimes.style.color = "#C0C7D2";
 const { data: { user: utilisateur } } =
   await client.auth.getUser();
 
@@ -650,9 +652,11 @@ boutonCommentaires.style.display = "block";
 boutonCommentaires.style.width = "100%";
 boutonCommentaires.style.textAlign = "left";
 boutonCommentaires.style.cursor = "pointer";
-boutonCommentaires.style.backgroundColor = "#593A78";
+
+boutonCommentaires.style.backgroundColor = "#17243B";
 boutonCommentaires.style.color = "#FFFFFF";
-boutonCommentaires.style.border = "1px solid #B99AD9";
+boutonCommentaires.style.border = "1px solid #C0C7D2";
+
 boutonCommentaires.style.borderRadius = "10px";
 boutonCommentaires.style.padding = "10px 14px";
 

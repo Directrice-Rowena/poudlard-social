@@ -622,12 +622,10 @@ if (erreurAimes) {
 
 zoneSociale.append(boutonAimer, compteurAimes);
 
-// Zone des commentaires
-
+ // Zone des commentaires
 
 const boutonCommentaires = document.createElement("button");
 boutonCommentaires.type = "button";
-boutonCommentaires.textContent = "▸ 💬 Commentaires";
 boutonCommentaires.style.marginTop = "16px";
 boutonCommentaires.style.display = "block";
 boutonCommentaires.style.width = "100%";
@@ -637,15 +635,18 @@ boutonCommentaires.style.cursor = "pointer";
 const zoneCommentaires = document.createElement("div");
 zoneCommentaires.style.display = "none";
 
+const listeCommentaires = document.createElement("div");
+const compteurCommentaires = document.createElement("span");
+
 boutonCommentaires.addEventListener("click", () => {
   const ouvert = zoneCommentaires.style.display === "none";
   zoneCommentaires.style.display = ouvert ? "block" : "none";
-  boutonCommentaires.textContent = ouvert
-    ? "▾ 💬 Commentaires"
-    : "▸ 💬 Commentaires";
+  boutonCommentaires.textContent =
+    (ouvert ? "▾ 💬 Commentaires " : "▸ 💬 Commentaires ") +
+    compteurCommentaires.textContent;
 });
 
-const listeCommentaires = document.createElement("div");
+
 
 const { data: commentaires, error: erreurCommentaires } =
   await client
@@ -654,6 +655,10 @@ const { data: commentaires, error: erreurCommentaires } =
     .eq("post_id", publication.id)
     .order("created_at", { ascending: true });
 
+compteurCommentaires.textContent =
+  "(" + (commentaires || []).length + ")";
+boutonCommentaires.textContent =
+  "▸ 💬 Commentaires " + compteurCommentaires.textContent;
 if (erreurCommentaires) {
   listeCommentaires.textContent =
     "Impossible de charger les commentaires.";

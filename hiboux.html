@@ -143,13 +143,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-  document.getElementById("message-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    document.getElementById("message-status").textContent =
-      "Ton hibou est prêt en maquette ! L'envoi réel sera activé dans une prochaine étape.";
-  });
-</script>
+
   
 <script>
   const SUPABASE_URL = "https://znzwzozhukugrjnznlng.supabase.co";
@@ -183,7 +177,63 @@
 
   chargerFondHiboux();
 </script>
+<script>
+  document.getElementById("message-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
 
+    const recipientName = document.getElementById("recipient").value.trim();
+    const messageContent = document.getElementById("message").value.trim();
+    const status = document.getElementById("message-status");
+
+    if (!recipientName || !messageContent) {
+      status.textContent = "Merci de remplir tous les champs.";
+      return;
+    }
+
+    status.textContent = "Recherche du destinataire...";
+
+    const { data: recipientProfile, error: recipientError } = await hibouxClient
+      .from("profiles")
+      .select("user_id, username")
+      .eq("username", recipientName)
+      .single();
+
+    if (recipientError || !recipientProfile) {
+      status.textContent = "Destinataire introuvable.";
+      return;
+    }
+
+    const { data: { user }, error: userError } = await hibouxClient.auth.getUser();
+
+    if (userError || !user) {
+      status.textContent = "Tu dois être connecté pour envoyer un hibou.";
+      return;
+    }
+
+    if (recipientProfile.user_id === user.id) {
+      status.textContent = "Tu ne peux pas t'envoyer un hibou à toi-même.";
+      return;
+    }
+
+    const { error: messageError } = await hibouxClient
+      .from("messages")
+      .insert({
+        sender_id: user.id,
+        receiver_id: recipientProfile.user_id,
+        content: messageContent
+      });
+
+    if (messageError) {
+      console.error(messageError);
+      status.textContent = "Le hibou n'a pas pu être envoyé.";
+      return;
+    }
+
+    status.textContent = "🦉 Hibou envoyé avec succès !";
+
+    document.getElementById("message").value = "";
+  });
+</script>
 </body>
 </html>
 ```

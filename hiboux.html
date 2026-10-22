@@ -564,10 +564,18 @@ messageRow.className =
     ? "message-row message-row-sent"
     : "message-row";
 
-const photoProfil =
-  estMonMessage
-    ? ""
-    : profilsParId[correspondantId]?.avatar_url || "";
+let photoProfil = "";
+
+if (!estMonMessage) {
+  const { data: profilCorrespondant } =
+    await hibouxClient
+      .from("profiles")
+      .select("avatar_url")
+      .eq("user_id", correspondantId)
+      .maybeSingle();
+
+  photoProfil = profilCorrespondant?.avatar_url || "";
+}
 
 if (photoProfil) {
   const avatar = document.createElement("img");

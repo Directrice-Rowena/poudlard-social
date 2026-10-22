@@ -556,18 +556,41 @@ replyForm.addEventListener("submit", async function(event) {
         ? "message-row message-row-sent"
         : "message-row";
 
-    const bubble =
-      document.createElement("div");
+const estMonMessage =
+  message.sender_id === user.id;
 
-    bubble.className =
-      message.sender_id === user.id
-        ? "message-bubble message-sent"
-        : "message-bubble message-received";
+messageRow.className =
+  estMonMessage
+    ? "message-row message-row-sent"
+    : "message-row";
 
-    bubble.textContent = message.content;
+const photoProfil =
+  estMonMessage
+    ? ""
+    : profilsParId[correspondantId]?.avatar_url || "";
 
-    messageRow.appendChild(bubble);
-    messagesContainer.appendChild(messageRow);
+if (photoProfil) {
+  const avatar = document.createElement("img");
+
+  avatar.src = photoProfil;
+  avatar.className = "message-avatar";
+  avatar.alt = "Photo de profil";
+
+  messageRow.appendChild(avatar);
+}
+
+const bubble =
+  document.createElement("div");
+
+bubble.className =
+  estMonMessage
+    ? "message-bubble message-sent"
+    : "message-bubble message-received";
+
+bubble.textContent = message.content;
+
+messageRow.appendChild(bubble);
+messagesContainer.appendChild(messageRow);
   });
 }
   function echapperHTML(texte) {

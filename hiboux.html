@@ -464,16 +464,82 @@ conversation.innerHTML = `
     return;
   }
 
-  conversationContent.innerHTML = `
-    <h2>💬 Conversation</h2>
-    <div class="conversation-view-messages"></div>
-  `;
+ conversationContent.innerHTML = `
+  <h2>💬 Conversation</h2>
 
+  <div class="conversation-view-messages"></div>
+
+  <form id="conversation-reply-form" class="conversation-reply-form">
+    <textarea
+      id="conversation-reply"
+      rows="3"
+      placeholder="Écris ton hibou..."
+      required
+    ></textarea>
+
+    <button type="submit">🦉 Envoyer</button>
+
+    <p id="conversation-reply-status" class="muted"></p>
+  </form>
+`;
   const messagesContainer =
     conversationContent.querySelector(
       ".conversation-view-messages"
     );
+    
+const replyForm = document.getElementById(
+  "conversation-reply-form"
+);
 
+const replyInput = document.getElementById(
+  "conversation-reply"
+);
+
+const replyStatus = document.getElementById(
+  "conversation-reply-status"
+);
+
+replyForm.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const content = replyInput.value.trim();
+
+  if (!content) return;
+
+  replyStatus.textContent = "Envoi du hibou... 🦉";
+
+  const { data: { user }, error: userError } =
+    await hibouxClient.auth.getUser();
+
+  if (userError || !user) {
+    replyStatus.textContent =
+      "Tu dois être connecté.";
+    return;
+  }
+
+  const { error: sendError } =
+    await hibouxClient
+      .from("messages")
+      .insert({
+        sender_id: user.id,
+        receiver_id: correspondantId,
+        content: content
+      });
+
+  if (sendError) {
+    console.error(sendError);
+
+    replyStatus.textContent =
+      "Le hibou n'a pas pu être envoyé.";
+    return;
+  }
+
+  replyInput.value = "";
+  replyStatus.textContent =
+    "🦉 Hibou envoyé !";
+
+  await ouvrirConversation(correspondantId);
+});
   if (!messages || messages.length === 0) {
     messagesContainer.innerHTML = `
       <p class="muted">Aucun message dans cette conversation.</p>

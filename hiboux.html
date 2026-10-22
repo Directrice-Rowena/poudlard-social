@@ -59,6 +59,80 @@ background: #b99a70;
   background: #ead5ae;
   color: #4b2e1f;
 }
+    .conversation-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.conversation-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #8b684b;
+  background: #ead8b8;
+}
+
+.conversation-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.conversation-view {
+  margin-top: 20px;
+}
+
+.conversation-view-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #b18a63;
+}
+
+.conversation-view-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 0;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 18px;
+}
+
+.message-received {
+  align-self: flex-start;
+  background: #ead5ae;
+}
+
+.message-sent {
+  align-self: flex-end;
+  background: #d5b48a;
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.message-row-sent {
+  justify-content: flex-end;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+ 
     .muted {
     color: #6f513b;
     }
@@ -151,9 +225,14 @@ button:hover {
         </form>
         <p id="message-status" class="muted" role="status"></p>
       </section>
+ 
     </div>
-  </main>
 
+    <section id="conversation-view" class="card conversation-view" hidden>
+      <div id="conversation-view-content"></div>
+    </section>
+
+  </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -247,22 +326,25 @@ button:hover {
       )
     )];
 
-    const { data: profiles, error: profilesError } =
-      await hibouxClient
-        .from("profiles")
-        .select("user_id, username")
-        .in("user_id", ids);
+   const { data: profiles, error: profilesError } =
+  await hibouxClient
+    .from("profiles")
+    .select("user_id, username, avatar_url")
+    .in("user_id", ids);
 
-    if (profilesError) {
-      console.error(profilesError);
-      return;
-    }
+if (profilesError) {
+  console.error(profilesError);
+  return;
+}
 
     const profilsParId = {};
 
-    (profiles || []).forEach(profile => {
-      profilsParId[profile.user_id] = profile.username;
-    });
+(profiles || []).forEach(profile => {
+  profilsParId[profile.user_id] = {
+    username: profile.username,
+    avatar_url: profile.avatar_url
+  };
+});
 
     /* Regrouper les messages par correspondant */
     const conversations = {};
@@ -285,14 +367,15 @@ button:hover {
 
         const dernierMessage = messagesConversation[0];
 
-        const nom =
-          profilsParId[correspondantId] ||
-          "Membre de Poudlard";
+       const profil =
+  profilsParId[correspondantId] || {
+    username: "Membre de Poudlard",
+    avatar_url: ""
+  };
 
-        const direction =
-          dernierMessage.sender_id === user.id
-            ? "Tu : "
-            : "";
+const nom = profil.username;
+const photo = profil.avatar_url;
+     const direction = ""; 
 
         const date = dernierMessage.created_at
           ? new Date(
@@ -306,21 +389,29 @@ button:hover {
         const conversation = document.createElement("div");
 
         conversation.className = "conversation";
+conversation.dataset.correspondantId = correspondantId;
+conversation.style.cursor = "pointer";
+conversation.innerHTML = `
+  <div class="conversation-header">
+    ${
+      photo
+        ? `<img src="${echapperHTML(photo)}" class="conversation-avatar" alt="Photo de ${echapperHTML(nom)}">`
+        : `<div class="conversation-avatar conversation-avatar-placeholder">🪶</div>`
+    }
 
-        conversation.innerHTML = `
-          <strong>🪶 ${nom}</strong>
+    <strong>${echapperHTML(nom)}</strong>
+  </div>
 
-          <p>
-            ${direction}${echapperHTML(
-              dernierMessage.content
-            )}
-          </p>
+  <p>
+    ${direction}${echapperHTML(
+      dernierMessage.content
+    )}
+  </p>
 
-          <small class="muted">
-            ${date}
-          </small>
-        `;
-
+  <small class="muted">
+    ${date}
+  </small>
+`;
         conversationsList.appendChild(conversation);
       }
     );
@@ -328,6 +419,91 @@ button:hover {
 
 
   /* Empêche le contenu d'un message de créer du HTML */
+  async function ouvrirConversation(correspondantId) {
+  const conversationView =
+    document.getElementById("conversation-view");
+
+  const conversationContent =
+    document.getElementById("conversation-view-content");
+
+  if (!conversationView || !conversationContent) return;
+
+  conversationView.hidden = false;
+
+  conversationContent.innerHTML = `
+    <p class="muted">Chargement de la conversation... 🦉</p>
+  `;
+
+  const { data: { user }, error: userError } =
+    await hibouxClient.auth.getUser();
+
+  if (userError || !user) {
+    conversationContent.innerHTML = `
+      <p class="muted">Tu dois être connecté pour lire cette conversation.</p>
+    `;
+    return;
+  }
+
+  const { data: messages, error: messagesError } =
+    await hibouxClient
+      .from("messages")
+      .select("id, sender_id, receiver_id, content, created_at")
+      .or(
+        `and(sender_id.eq.${user.id},receiver_id.eq.${correspondantId}),and(sender_id.eq.${correspondantId},receiver_id.eq.${user.id})`
+      )
+      .order("created_at", { ascending: true });
+
+  if (messagesError) {
+    console.error(messagesError);
+
+    conversationContent.innerHTML = `
+      <p class="muted">
+        Impossible de charger cette conversation.
+      </p>
+    `;
+    return;
+  }
+
+  conversationContent.innerHTML = `
+    <h2>💬 Conversation</h2>
+    <div class="conversation-view-messages"></div>
+  `;
+
+  const messagesContainer =
+    conversationContent.querySelector(
+      ".conversation-view-messages"
+    );
+
+  if (!messages || messages.length === 0) {
+    messagesContainer.innerHTML = `
+      <p class="muted">Aucun message dans cette conversation.</p>
+    `;
+    return;
+  }
+
+  messages.forEach(message => {
+    const messageRow =
+      document.createElement("div");
+
+    messageRow.className =
+      message.sender_id === user.id
+        ? "message-row message-row-sent"
+        : "message-row";
+
+    const bubble =
+      document.createElement("div");
+
+    bubble.className =
+      message.sender_id === user.id
+        ? "message-bubble message-sent"
+        : "message-bubble message-received";
+
+    bubble.textContent = message.content;
+
+    messageRow.appendChild(bubble);
+    messagesContainer.appendChild(messageRow);
+  });
+}
   function echapperHTML(texte) {
     const div = document.createElement("div");
     div.textContent = texte;
@@ -418,6 +594,23 @@ button:hover {
     });
 
 
+
+
+document.addEventListener("click", function(event) {
+  const conversation = event.target.closest(".conversation");
+
+  if (!conversation) return;
+
+  const correspondantId =
+    conversation.dataset.correspondantId;
+
+  if (!correspondantId) return;
+
+  ouvrirConversation(correspondantId);
+});
+
+
+ 
   /* Chargement initial des conversations */
   chargerMessages();
 </script>

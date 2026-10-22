@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Les Hiboux | Poudlard Social</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Georgia, serif;
-      color: #edf1ff;
-      background: #10182b;
-    }
+   body {
+  margin: 0;
+  font-family: Georgia, serif;
+  color: #4b2e1f;
+  background: #e8d3ad;
+}
     header {
       padding: 24px 16px;
       text-align: center;
@@ -34,25 +34,27 @@
       width: min(850px, 92%);
       margin: 24px auto;
     }
-    .card {
-      margin-bottom: 20px;
-      padding: 20px;
-      border: 1px solid #3a4969;
-      border-radius: 16px;
-      background: #192541;
-    }
+ .card {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #9b7653;
+  border-radius: 16px;
+  background: #f3e3c2;
+  box-shadow: 0 4px 12px rgba(75, 46, 31, 0.15);
+}
     .layout {
       display: grid;
       grid-template-columns: minmax(180px, 1fr) minmax(250px, 2fr);
       gap: 18px;
     }
     .conversation {
-      margin: 10px 0;
-      padding: 12px;
-      border: 1px solid #3a4969;
-      border-radius: 10px;
-      background: #141f37;
-    }
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #b18a63;
+  border-radius: 10px;
+  background: #ead5ae;
+  color: #4b2e1f;
+}
     .muted {
       color: #b9c5df;
     }
@@ -72,12 +74,19 @@
       color: #edf1ff;
       background: #10182b;
     }
-    button {
-      margin-top: 12px;
-      color: white;
-      background: #514276;
-      cursor: pointer;
-    }
+  button {
+  margin-top: 12px;
+  color: #fff8e8;
+  background: #8b1e1e;
+  border: 2px solid #641313;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(75, 30, 20, 0.25);
+}
+
+button:hover {
+  background: #a52a2a;
+}
     @media (max-width: 600px) {
       .layout {
         grid-template-columns: 1fr;

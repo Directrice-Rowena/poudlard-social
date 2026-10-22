@@ -481,8 +481,18 @@ console.log("MESSAGES DE LA CONVERSATION :", messages);
     return;
   }
 
- conversationContent.innerHTML = `
-  <h2>💬 Conversation</h2>
+conversationContent.innerHTML = `
+  <div class="conversation-view-header">
+    ${
+      photoCorrespondant
+        ? `<img src="${echapperHTML(photoCorrespondant)}" class="conversation-avatar" alt="Photo de profil">`
+        : `<div class="conversation-avatar conversation-avatar-placeholder">🪶</div>`
+    }
+
+    <strong>${echapperHTML(
+      profilCorrespondant?.username || "Membre de Poudlard"
+    )}</strong>
+  </div>
 
   <div class="conversation-view-messages"></div>
 

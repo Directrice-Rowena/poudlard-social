@@ -443,7 +443,15 @@ conversation.innerHTML = `
     `;
     return;
   }
+const { data: profilCorrespondant } =
+  await hibouxClient
+    .from("profiles")
+    .select("username, avatar_url")
+    .eq("user_id", correspondantId)
+    .maybeSingle();
 
+const photoCorrespondant =
+  profilCorrespondant?.avatar_url || "";
   const { data: messages, error: messagesError } =
     await hibouxClient
       .from("messages")
@@ -564,7 +572,9 @@ messageRow.className =
     ? "message-row message-row-sent"
     : "message-row";
 
-const photoProfil = "";
+const photoProfil = estMonMessage
+  ? ""
+  : photoCorrespondant;
 if (photoProfil) {
   const avatar = document.createElement("img");
 

@@ -452,6 +452,15 @@ const { data: profilCorrespondant } =
 
 const photoCorrespondant =
   profilCorrespondant?.avatar_url || "";
+   const { data: monProfil } =
+  await hibouxClient
+    .from("profiles")
+    .select("avatar_url")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+const maPhoto =
+  monProfil?.avatar_url || ""; 
   const { data: messages, error: messagesError } =
     await hibouxClient
       .from("messages")
@@ -573,7 +582,7 @@ messageRow.className =
     : "message-row";
 
 const photoProfil = estMonMessage
-  ? ""
+  ? maPhoto
   : photoCorrespondant;
 if (photoProfil) {
   const avatar = document.createElement("img");

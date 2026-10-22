@@ -615,7 +615,11 @@ messagesContainer.appendChild(messageRow);
 
 });
 }
-
+function echapperHTML(texte) {
+  const div = document.createElement("div");
+  div.textContent = texte;
+  return div.innerHTML;
+}
   /* ENVOI D'UN HIBOU */
   document.getElementById("message-form")
     .addEventListener("submit", async function(event) {

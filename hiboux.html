@@ -177,63 +177,237 @@
 
   chargerFondHiboux();
 </script>
+```html
 <script>
-  document.getElementById("message-form").addEventListener("submit", async function(event) {
-    event.preventDefault();
+  const conversationsContainer = document.querySelector(
+    ".layout .card:first-child"
+  );
 
-    const recipientName = document.getElementById("recipient").value.trim();
-    const messageContent = document.getElementById("message").value.trim();
-    const status = document.getElementById("message-status");
+  async function chargerMessages() {
+    if (!conversationsContainer) return;
 
-    if (!recipientName || !messageContent) {
-      status.textContent = "Merci de remplir tous les champs.";
-      return;
-    }
-
-    status.textContent = "Recherche du destinataire...";
-
-    const { data: recipientProfile, error: recipientError } = await hibouxClient
-      .from("profiles")
-      .select("user_id, username")
-      .eq("username", recipientName)
-      .single();
-
-    if (recipientError || !recipientProfile) {
-      status.textContent = "Destinataire introuvable.";
-      return;
-    }
-
-    const { data: { user }, error: userError } = await hibouxClient.auth.getUser();
+    const { data: { user }, error: userError } =
+      await hibouxClient.auth.getUser();
 
     if (userError || !user) {
-      status.textContent = "Tu dois être connecté pour envoyer un hibou.";
       return;
     }
 
-    if (recipientProfile.user_id === user.id) {
-      status.textContent = "Tu ne peux pas t'envoyer un hibou à toi-même.";
+    const { data: messages, error: messagesError } =
+      await hibouxClient
+        .from("messages")
+        .select("id, sender_id, receiver_id, content, created_at")
+        .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+        .order("created_at", { ascending: false });
+
+    if (messagesError) {
+      console.error(messagesError);
       return;
     }
 
-    const { error: messageError } = await hibouxClient
-      .from("messages")
-      .insert({
-        sender_id: user.id,
-        receiver_id: recipientProfile.user_id,
-        content: messageContent
-      });
+    /* On garde uniquement la partie qui contient le titre
+       et on remplace les anciennes conversations statiques. */
+    conversationsContainer.innerHTML = `
+      <h2>📜 Conversations</h2>
+      <div id="conversations-list"></div>
+    `;
 
-    if (messageError) {
-      console.error(messageError);
-      status.textContent = "Le hibou n'a pas pu être envoyé.";
+    const conversationsList =
+      document.getElementById("conversations-list");
+
+    if (!messages || messages.length === 0) {
+      conversationsList.innerHTML = `
+        <p class="muted">
+          Aucun hibou reçu ou envoyé pour le moment. 🦉
+        </p>
+      `;
       return;
     }
 
-    status.textContent = "🦉 Hibou envoyé avec succès !";
+    /* Trouver les personnes avec lesquelles l'utilisateur échange */
+    const ids = [...new Set(
+      messages.map(message =>
+        message.sender_id === user.id
+          ? message.receiver_id
+          : message.sender_id
+      )
+    )];
 
-    document.getElementById("message").value = "";
-  });
+    const { data: profiles, error: profilesError } =
+      await hibouxClient
+        .from("profiles")
+        .select("user_id, username")
+        .in("user_id", ids);
+
+    if (profilesError) {
+      console.error(profilesError);
+      return;
+    }
+
+    const profilsParId = {};
+
+    (profiles || []).forEach(profile => {
+      profilsParId[profile.user_id] = profile.username;
+    });
+
+    /* Regrouper les messages par correspondant */
+    const conversations = {};
+
+    messages.forEach(message => {
+      const correspondant =
+        message.sender_id === user.id
+          ? message.receiver_id
+          : message.sender_id;
+
+      if (!conversations[correspondant]) {
+        conversations[correspondant] = [];
+      }
+
+      conversations[correspondant].push(message);
+    });
+
+    Object.entries(conversations).forEach(
+      ([correspondantId, messagesConversation]) => {
+
+        const dernierMessage = messagesConversation[0];
+
+        const nom =
+          profilsParId[correspondantId] ||
+          "Membre de Poudlard";
+
+        const direction =
+          dernierMessage.sender_id === user.id
+            ? "Tu : "
+            : "";
+
+        const date = dernierMessage.created_at
+          ? new Date(
+              dernierMessage.created_at
+            ).toLocaleString("fr-FR", {
+              dateStyle: "short",
+              timeStyle: "short"
+            })
+          : "";
+
+        const conversation = document.createElement("div");
+
+        conversation.className = "conversation";
+
+        conversation.innerHTML = `
+          <strong>🪶 ${nom}</strong>
+
+          <p>
+            ${direction}${echapperHTML(
+              dernierMessage.content
+            )}
+          </p>
+
+          <small class="muted">
+            ${date}
+          </small>
+        `;
+
+        conversationsList.appendChild(conversation);
+      }
+    );
+  }
+
+
+  /* Empêche le contenu d'un message de créer du HTML */
+  function echapperHTML(texte) {
+    const div = document.createElement("div");
+    div.textContent = texte;
+    return div.innerHTML;
+  }
+
+
+  /* ENVOI D'UN HIBOU */
+  document.getElementById("message-form")
+    .addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+      const recipientName =
+        document.getElementById("recipient")
+          .value.trim();
+
+      const messageContent =
+        document.getElementById("message")
+          .value.trim();
+
+      const status =
+        document.getElementById("message-status");
+
+      if (!recipientName || !messageContent) {
+        status.textContent =
+          "Merci de remplir tous les champs.";
+        return;
+      }
+
+      status.textContent =
+        "Recherche du destinataire...";
+
+      const { data: recipientProfile, error: recipientError } =
+        await hibouxClient
+          .from("profiles")
+          .select("user_id, username")
+          .eq("username", recipientName)
+          .single();
+
+      if (recipientError || !recipientProfile) {
+        status.textContent =
+          "Destinataire introuvable.";
+        return;
+      }
+
+      const { data: { user }, error: userError } =
+        await hibouxClient.auth.getUser();
+
+      if (userError || !user) {
+        status.textContent =
+          "Tu dois être connecté pour envoyer un hibou.";
+        return;
+      }
+
+      if (recipientProfile.user_id === user.id) {
+        status.textContent =
+          "Tu ne peux pas t'envoyer un hibou à toi-même.";
+        return;
+      }
+
+      const { error: messageError } =
+        await hibouxClient
+          .from("messages")
+          .insert({
+            sender_id: user.id,
+            receiver_id: recipientProfile.user_id,
+            content: messageContent
+          });
+
+      if (messageError) {
+        console.error(messageError);
+
+        status.textContent =
+          "Le hibou n'a pas pu être envoyé.";
+
+        return;
+      }
+
+      status.textContent =
+        "🦉 Hibou envoyé avec succès !";
+
+      document.getElementById("message").value = "";
+      document.getElementById("recipient").value = "";
+
+      /* Recharge immédiatement les conversations */
+      await chargerMessages();
+    });
+
+
+  /* Chargement initial des conversations */
+  chargerMessages();
 </script>
+```
 </body>
 </html>
 ```

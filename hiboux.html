@@ -584,16 +584,6 @@ messageRow.className =
 const photoProfil = estMonMessage
   ? maPhoto
   : photoCorrespondant;
-if (photoProfil) {
-  const avatar = document.createElement("img");
-
-  avatar.src = photoProfil;
-  avatar.className = "message-avatar";
-  avatar.alt = "Photo de profil";
-
-  messageRow.appendChild(avatar);
-}
-
 const bubble =
   document.createElement("div");
 
@@ -603,17 +593,28 @@ bubble.className =
     : "message-bubble message-received";
 
 bubble.textContent = message.content;
+if (photoProfil) {
+  const avatar = document.createElement("img");
 
-messageRow.appendChild(bubble);
-messagesContainer.appendChild(messageRow);
-  });
-}
-  function echapperHTML(texte) {
-    const div = document.createElement("div");
-    div.textContent = texte;
-    return div.innerHTML;
+  avatar.src = photoProfil;
+  avatar.className = "message-avatar";
+  avatar.alt = "Photo de profil";
+
+  if (estMonMessage) {
+    messageRow.appendChild(bubble);
+    messageRow.appendChild(avatar);
+  } else {
+    messageRow.appendChild(avatar);
+    messageRow.appendChild(bubble);
   }
+} else {
+  messageRow.appendChild(bubble);
+}
 
+messagesContainer.appendChild(messageRow);
+
+});
+}
 
   /* ENVOI D'UN HIBOU */
   document.getElementById("message-form")

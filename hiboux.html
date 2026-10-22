@@ -398,7 +398,10 @@ conversation.innerHTML = `
         : `<div class="conversation-avatar conversation-avatar-placeholder">🪶</div>`
     }
 
-    <strong>${echapperHTML(nom)}</strong>
+ <strong>${echapperHTML(nom)}</strong>
+${dernierMessage.receiver_id === user.id && !dernierMessage.lu
+  ? `<span class="unread-badge" title="Nouveau hibou">🏰</span>`
+  : ""}
   </div>
 
   <p>

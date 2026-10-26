@@ -399,9 +399,15 @@ conversation.innerHTML = `
     }
 
  <strong>${echapperHTML(nom)}</strong>
-${dernierMessage.receiver_id === user.id && !dernierMessage.lu
-  ? `<span class="unread-badge" title="Nouveau hibou">🏰</span>`
-  : ""}
+${(() => {
+  const messagesNonLus = messagesConversation.filter(
+    message => message.receiver_id === user.id && !message.lu
+  ).length;
+
+  return messagesNonLus > 0
+    ? `<span class="unread-badge" title="${messagesNonLus} message${messagesNonLus > 1 ? "s" : ""} non lu${messagesNonLus > 1 ? "s" : ""}">✉️ ${messagesNonLus}</span>`
+    : "";
+})()}
   </div>
 
   <p>

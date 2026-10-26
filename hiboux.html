@@ -482,7 +482,7 @@ console.log("MESSAGES DE LA CONVERSATION :", messages);
     `;
     return;
   }
-
+await marquerMessagesLus(correspondantId);
 conversationContent.innerHTML = `
   <div class="conversation-view-header">
     ${

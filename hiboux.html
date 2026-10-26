@@ -627,6 +627,23 @@ messagesContainer.appendChild(messageRow);
 
 });
 }
+  async function marquerMessagesLus(correspondantId) {
+  const { data: { user }, error: userError } =
+    await hibouxClient.auth.getUser();
+
+  if (userError || !user) return;
+
+  const { error } = await hibouxClient
+    .from("messages")
+    .update({ lu: true })
+    .eq("sender_id", correspondantId)
+    .eq("receiver_id", user.id)
+    .eq("lu", false);
+
+  if (error) {
+    console.error("Erreur lors du marquage des messages lus :", error);
+  }
+}
 function echapperHTML(texte) {
   const div = document.createElement("div");
   div.textContent = texte;
